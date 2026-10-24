@@ -1,30 +1,21 @@
-# SEED - Smart Plant Assistant (phone app)
+# SEED - Smart Plant Assistant
 
-A phone app for identifying plants from a photo, reading care guides, checking whether a spot suits a plant, and browsing agricultural services.
+A phone app for identifying plants from a photo, reading care guides, checking whether a spot suits a plant, and browsing local services.
 
-No server or install needed. It is a web app you add to your phone's home screen.
+No install from an app store and no server. Open the link on your phone and add it to your home screen.
+
+**Live app:** https://sharinin.github.io/SeedPlant/
 
 ## Use it on your phone
 
-1. Open the app link on your phone in Chrome (Android) or Safari (iPhone).
-2. Paste your Pl@ntNet API key when asked, then tap **Save key**. The key is stored only on your phone.
-3. Take or pick a photo, choose the plant part, and tap **Identify plant**.
-4. To install it: Chrome menu > **Add to Home screen**, or Safari Share > **Add to Home Screen**.
+1. Open the link in Chrome (Android) or Safari (iPhone).
+2. Take or choose a photo, pick the plant part, and tap **Identify plant**.
+3. Browse the **Guide**, check a spot in **Placement**, or find services.
 
-Get a free key at https://my-api.plantnet.org/ (free tier: 500 identifications per day).
-
-## Run it on a computer (optional)
-
-Any static file server works. From this folder:
-
-```
-python -m http.server 8080
-```
-
-Then open http://localhost:8080. Plain http works on the computer; a phone needs the https link.
+To add it to your home screen: Chrome menu > **Add to Home screen**, or Safari Share > **Add to Home Screen**.
 
 ## Notes
 
-- Your key is never written into the code. Do not commit a file containing it.
-- The plant guide, placement check and services list work without a key.
-- Services are sample listings for the demo.
+- Plant identification uses the Pl@ntNet API (free tier, 500 identifications per day).
+- The guide, placement check and services work without a connection after the first load.
+- Service listings are sample entries for the demo.

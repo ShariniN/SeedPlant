@@ -2,105 +2,188 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#2e7d4f">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f4d3a">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="SEED">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <title>SEED - Smart Plant Assistant</title>
 <style>
   :root {
-    --bg: #f5f8f2; --card: #ffffff; --text: #1d2b1f; --muted: #5d6e60;
-    --brand: #2e7d4f; --brand-soft: #dff1e5; --warn: #b26a00; --warn-soft: #fff1d6; --bad: #b3261e; --bad-soft: #fde2e0;
-    --border: #d9e3da;
+    --bg: #f6f3ea; --card: #fffdf8; --ink: #1f2a22; --muted: #6b7a6d;
+    --forest: #1f4d3a; --forest-2: #2f6b52; --sage: #e3ebdc; --sage-2: #cfdcc6;
+    --terra: #c8643b; --terra-soft: #f7e3d7; --line: #e6e0d1;
+    --warn: #9a5b00; --warn-soft: #fbefd6; --bad: #a32d22; --bad-soft: #fbdfdb;
+    --radius: 18px; --shadow: 0 1px 2px rgba(31,42,34,.06), 0 8px 24px rgba(31,42,34,.06);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #101812; --card: #18231b; --text: #e6efe7; --muted: #9db0a1;
-      --brand: #6fcf97; --brand-soft: #1f3a29; --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
-      --border: #2c3d30;
+      --bg: #111a14; --card: #1a251d; --ink: #eef3ec; --muted: #9fb0a2;
+      --forest: #8fd1b0; --forest-2: #6fbf9a; --sage: #22332a; --sage-2: #2c4136;
+      --terra: #f0a27f; --terra-soft: #3a2a22; --line: #2a3a2f;
+      --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #101812; --card: #18231b; --text: #e6efe7; --muted: #9db0a1;
-    --brand: #6fcf97; --brand-soft: #1f3a29; --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
-    --border: #2c3d30;
+    --bg: #111a14; --card: #1a251d; --ink: #eef3ec; --muted: #9fb0a2;
+    --forest: #8fd1b0; --forest-2: #6fbf9a; --sage: #22332a; --sage-2: #2c4136;
+    --terra: #f0a27f; --terra-soft: #3a2a22; --line: #2a3a2f;
+    --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.45; }
-  header { background: var(--brand); color: #fff; padding: 16px; }
-  header h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
-  header p { margin: 2px 0 0; font-size: 13px; opacity: .9; }
-  nav { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
-  nav button { border: 1px solid var(--border); background: transparent; color: var(--text); padding: 8px 14px; border-radius: 999px; font-size: 14px; white-space: nowrap; cursor: pointer; }
-  nav button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
-  main { padding: 16px; max-width: 720px; margin: 0 auto; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+
+  /* Hero */
+  .hero {
+    background: radial-gradient(120% 140% at 100% 0%, var(--forest-2) 0%, var(--forest) 55%, #163a2b 100%);
+    color: #f4f7f1; padding: 28px 20px 40px; position: relative; overflow: hidden;
+    border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
+  }
+  .hero::after { content: "🌿"; position: absolute; right: -10px; bottom: -22px; font-size: 130px; opacity: .14; transform: rotate(-18deg); pointer-events: none; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 22px; letter-spacing: .04em; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 10px; background: #f4f7f1; color: var(--forest); display: grid; place-items: center; font-size: 18px; }
+  .hero h1 { font-size: 30px; line-height: 1.15; margin-top: 18px; max-width: 16ch; }
+  .hero p { margin: 8px 0 0; opacity: .85; max-width: 32ch; }
+
+  main { padding: 0 16px; margin-top: -22px; max-width: 720px; margin-left: auto; margin-right: auto; position: relative; }
   section { display: none; }
   section.active { display: block; }
-  h2 { font-size: 18px; margin: 4px 0 12px; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-  input[type="text"], input[type="password"], select, input[type="file"] { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 16px; margin-bottom: 10px; }
-  label { font-size: 14px; color: var(--muted); display: block; margin-bottom: 4px; }
-  .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-  @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
-  .plant-btn { text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; color: var(--text); cursor: pointer; font: inherit; }
-  .plant-btn:hover { border-color: var(--brand); }
-  .emoji { font-size: 28px; }
-  .sci { font-style: italic; color: var(--muted); font-size: 13px; }
-  .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); margin: 2px 4px 2px 0; }
-  .btn { background: var(--brand); color: #fff; border: 0; padding: 10px 16px; border-radius: 10px; font-size: 15px; cursor: pointer; }
-  .btn:disabled { opacity: .5; cursor: default; }
-  .btn.secondary { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
-  .preview { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-top: 10px; display: none; }
-  dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; margin: 0; font-size: 15px; }
-  dt { color: var(--muted); }
-  dd { margin: 0; }
-  .verdict { padding: 12px; border-radius: 12px; margin-bottom: 8px; }
-  .verdict.good { background: var(--brand-soft); color: var(--brand); }
+  .section-title { font-size: 20px; margin: 22px 4px 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .card h3 { font-size: 17px; margin-bottom: 4px; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  .hidden { display: none !important; }
+
+  /* Photo drop zone */
+  .drop {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    border: 2px dashed var(--sage-2); background: var(--sage); border-radius: 16px;
+    min-height: 150px; padding: 18px; text-align: center; cursor: pointer; position: relative; overflow: hidden;
+  }
+  .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop .big { font-size: 34px; }
+  .drop strong { font-family: Fraunces, Georgia, serif; font-size: 17px; }
+  .preview { width: 100%; max-height: 280px; object-fit: cover; border-radius: 16px; display: none; margin-bottom: 4px; }
+
+  select, input[type="text"] {
+    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font: inherit; font-size: 16px; margin-bottom: 12px; appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
+  label { font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin: 0 0 6px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--forest); color: #fff; border: 0; padding: 13px 20px; border-radius: 14px;
+    font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%;
+    box-shadow: 0 6px 16px rgba(31,77,58,.25); transition: transform .08s ease, opacity .2s;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn:disabled { opacity: .45; cursor: default; box-shadow: none; }
+  .btn.ghost { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); box-shadow: none; width: auto; padding: 10px 16px; }
+
+  .status { font-size: 13.5px; color: var(--muted); margin: 12px 2px 4px; min-height: 20px; }
+
+  /* Result cards */
+  .match { display: flex; gap: 12px; align-items: flex-start; }
+  .score { min-width: 54px; height: 54px; border-radius: 16px; background: var(--sage); color: var(--forest); display: grid; place-items: center; font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 16px; }
+  .match .name { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 16px; }
+  .match .sub { color: var(--muted); font-size: 13px; }
+  .match .btn { margin-top: 10px; }
+
+  /* Plant grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (min-width: 620px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .plant-btn {
+    text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px; color: var(--ink); cursor: pointer; font: inherit; box-shadow: var(--shadow);
+  }
+  .plant-btn:active { transform: scale(.98); }
+  .emoji-bubble { width: 52px; height: 52px; border-radius: 16px; background: var(--sage); display: grid; place-items: center; font-size: 26px; margin-bottom: 10px; }
+  .plant-btn strong { font-family: Fraunces, Georgia, serif; font-size: 15.5px; display: block; line-height: 1.25; }
+  .sci { font-style: italic; color: var(--muted); font-size: 12.5px; display: block; margin-top: 2px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--sage); color: var(--forest); margin: 8px 6px 0 0; }
+  .tag.terra { background: var(--terra-soft); color: var(--terra); }
+
+  /* Plant detail */
+  .detail-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .detail-head .emoji-bubble { width: 70px; height: 70px; font-size: 36px; margin: 0; flex: none; }
+  .detail-head h2 { font-size: 24px; line-height: 1.15; }
+  .facts { display: grid; gap: 10px; margin-top: 6px; }
+  .fact { background: var(--bg); border-radius: 14px; padding: 12px 14px; }
+  .fact b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--forest); margin-bottom: 2px; }
+  .fact span { font-size: 14.5px; }
+  .back { margin-bottom: 12px; }
+
+  /* Placement verdicts */
+  .verdict { border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; }
+  .verdict .title { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 17px; }
+  .verdict.good { background: var(--sage); color: var(--forest); }
   .verdict.caution { background: var(--warn-soft); color: var(--warn); }
   .verdict.bad { background: var(--bad-soft); color: var(--bad); }
-  .verdict ul { margin: 6px 0 0 18px; padding: 0; color: var(--text); font-size: 14px; }
-  .note { font-size: 13px; color: var(--muted); }
-  .hidden { display: none !important; }
-  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .verdict ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink); font-size: 14px; }
+  .verdict li + li { margin-top: 4px; }
+  .verdict .sub { font-size: 13px; color: var(--ink); opacity: .75; margin-top: 2px; }
+
+  /* Services */
+  .svc { display: flex; gap: 12px; align-items: center; }
+  .svc .emoji-bubble { margin: 0; flex: none; }
+  .svc strong { font-family: Fraunces, Georgia, serif; font-size: 16px; display: block; }
+
+  /* Bottom tab bar (app-style) */
+  nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+    background: var(--card); border-top: 1px solid var(--line);
+    padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -6px 20px rgba(31,42,34,.06);
+  }
+  nav button {
+    border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; cursor: pointer; border-radius: 12px;
+  }
+  nav button .ic { font-size: 20px; line-height: 1; }
+  nav button.active { color: var(--forest); background: var(--sage); }
 </style>
 </head>
 <body>
-<header>
-  <h1>SEED</h1>
-  <p>Plant smarter. Grow better.</p>
+<header class="hero">
+  <div class="brand"><span class="brand-mark">🌱</span> SEED</div>
+  <h1>Know your plants.</h1>
+  <p>Identify, care for, and place the plants around you.</p>
 </header>
-
-<nav>
-  <button data-tab="identify" class="active">Identify</button>
-  <button data-tab="plants">Plant Guide</button>
-  <button data-tab="placement">Placement</button>
-  <button data-tab="services">Services</button>
-</nav>
 
 <main>
   <!-- IDENTIFY -->
   <section id="identify" class="active">
-    <h2>Identify a plant</h2>
-
-    <!-- API key setup (shown until a key is saved) -->
-    <div class="card hidden" id="key-card">
-      <label for="key-input">Pl@ntNet API key</label>
-      <input type="password" id="key-input" placeholder="Paste your key" autocomplete="off">
-      <div class="row">
-        <button class="btn" id="key-save">Save key</button>
-        <span class="note">Stored only on this phone. Get a free key at my-api.plantnet.org.</span>
-      </div>
-      <p class="note" id="key-status"></p>
-    </div>
+    <h2 class="section-title">Identify a plant</h2>
 
     <div class="card">
-      <label for="photo">Take or upload a photo</label>
-      <input type="file" id="photo" accept="image/*" capture="environment">
+      <label for="photo">Photo</label>
+      <div class="drop" id="drop">
+        <div class="big">📷</div>
+        <strong id="drop-text">Take or choose a photo</strong>
+        <span class="muted">Clear close-up of a leaf or flower works best</span>
+        <input type="file" id="photo" accept="image/*" capture="environment">
+      </div>
       <img id="preview" class="preview" alt="Plant preview">
-      <label for="organ">What part of the plant is in the photo?</label>
+
+      <label for="organ" style="margin-top:14px">Which part is it?</label>
       <select id="organ">
         <option value="leaf">Leaf</option>
         <option value="flower">Flower</option>
@@ -109,33 +192,31 @@
         <option value="habit">Whole plant</option>
         <option value="other">Other</option>
       </select>
-      <div class="row">
-        <button class="btn" id="identify-btn" disabled>Identify plant</button>
-        <button class="btn secondary hidden" id="key-change">Change API key</button>
-      </div>
-      <p class="note" id="identify-status">Choose a photo first.</p>
+      <button class="btn" id="identify-btn" disabled>Identify plant</button>
+      <p class="status" id="identify-status">Pick a photo to get started.</p>
       <div id="identify-results"></div>
     </div>
 
     <div class="card">
-      <label for="search">Or search by name (common or scientific)</label>
-      <input type="text" id="search" placeholder="e.g. tomato, Solanum, money plant">
+      <label for="search">Or search by name</label>
+      <input type="text" id="search" placeholder="tomato, Solanum, money plant…">
       <div id="search-results" class="grid"></div>
     </div>
   </section>
 
   <!-- PLANT GUIDE -->
   <section id="plants">
+    <h2 class="section-title">Plant guide</h2>
     <div id="plant-list" class="grid"></div>
     <div id="plant-detail" class="hidden">
-      <button class="btn secondary" id="back-to-list" style="margin-bottom:12px">&larr; All plants</button>
+      <button class="btn ghost back" id="back-to-list">&larr; All plants</button>
       <div class="card" id="detail-card"></div>
     </div>
   </section>
 
   <!-- PLACEMENT -->
   <section id="placement">
-    <h2>Is this location suitable?</h2>
+    <h2 class="section-title">Will it grow here?</h2>
     <div class="card">
       <label for="p-plant">Plant</label>
       <select id="p-plant"></select>
@@ -161,26 +242,36 @@
         <option value="ok">More than 2 m away</option>
         <option value="close">Less than 2 m away</option>
       </select>
-      <button class="btn" id="check-btn">Check suitability</button>
+      <button class="btn" id="check-btn">Check this spot</button>
     </div>
     <div id="placement-result"></div>
   </section>
 
   <!-- SERVICES -->
   <section id="services">
-    <h2>Verified agricultural services</h2>
+    <h2 class="section-title">Local services</h2>
     <div class="card">
       <label for="s-type">Service type</label>
       <select id="s-type"></select>
       <label for="s-q">Search by name or area</label>
-      <input type="text" id="s-q" placeholder="e.g. Kandy, soil">
+      <input type="text" id="s-q" placeholder="Kandy, soil…">
     </div>
-    <div id="service-list" class="grid"></div>
-    <p class="note">Listings are sample entries. Replace them with real verified partners before release.</p>
+    <div id="service-list" class="grid" style="grid-template-columns:1fr"></div>
+    <p class="muted" style="margin:8px 4px">Sample listings for the demo. Replace with verified partners before release.</p>
   </section>
 </main>
 
+<nav>
+  <button data-tab="identify" class="active"><span class="ic">📷</span>Identify</button>
+  <button data-tab="plants"><span class="ic">📖</span>Guide</button>
+  <button data-tab="placement"><span class="ic">📍</span>Placement</button>
+  <button data-tab="services"><span class="ic">🧺</span>Services</button>
+</nav>
+
 <script>
+// ---- Pl@ntNet key (free tier, 500 identifications/day) ----
+const PLANTNET_KEY = "2b10gXLHBOAJwDM2h65CVJU1";
+
 // ---- Data: 10 starter plants (Sri Lanka-friendly) ----
 const PLANTS = [
   { id: "aloe", name: "Aloe Vera", sci: "Aloe barbadensis", emoji: "🌵", type: "Succulent",
@@ -285,33 +376,29 @@ const PLANTS = [
 ];
 
 const SERVICES = [
-  { name: "Green Roots Nursery", type: "Nursery", area: "Colombo", note: "Potted plants, herbs and seedlings" },
-  { name: "Hill Country Soil Lab", type: "Soil testing", area: "Kandy", note: "Soil pH and nutrient testing" },
-  { name: "Garden Plan Co.", type: "Consultant", area: "Galle", note: "Landscaping and garden layout advice" }
+  { name: "Green Roots Nursery", type: "Nursery", area: "Colombo", emoji: "🪴", note: "Potted plants, herbs and seedlings" },
+  { name: "Hill Country Soil Lab", type: "Soil testing", area: "Kandy", emoji: "🧪", note: "Soil pH and nutrient testing" },
+  { name: "Garden Plan Co.", type: "Consultant", area: "Galle", emoji: "📐", note: "Landscaping and garden layout advice" }
 ];
 
 // ---- Helpers ----
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-// Storage can be blocked (private mode), so every access is wrapped
-function getKey() { try { return localStorage.getItem("plantnetKey") || ""; } catch (e) { return ""; } }
-function setKey(k) { try { localStorage.setItem("plantnetKey", k); return true; } catch (e) { return false; } }
-function clearKey() { try { localStorage.removeItem("plantnetKey"); } catch (e) {} }
-
 // ---- Tabs ----
 function showTab(name) {
   document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
   document.querySelectorAll("section").forEach(s => s.classList.toggle("active", s.id === name));
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
 // ---- Plant cards ----
 function plantCard(p) {
   return `<button class="plant-btn" data-id="${p.id}">
-    <div class="emoji">${p.emoji}</div>
-    <strong>${esc(p.name)}</strong><br>
-    <span class="sci">${esc(p.sci)}</span><br>
+    <div class="emoji-bubble">${p.emoji}</div>
+    <strong>${esc(p.name)}</strong>
+    <span class="sci">${esc(p.sci)}</span>
     <span class="tag">${esc(p.type)}</span>
   </button>`;
 }
@@ -320,18 +407,23 @@ function openPlant(id) {
   const p = PLANTS.find(x => x.id === id);
   if (!p) return;
   $("detail-card").innerHTML = `
-    <div class="emoji">${p.emoji}</div>
-    <h2>${esc(p.name)}</h2>
-    <p class="sci">${esc(p.sci)} · ${esc(p.type)}</p>
-    <dl>
-      <dt>Watering</dt><dd>${esc(p.water)}</dd>
-      <dt>Sunlight</dt><dd>${esc(p.light)}</dd>
-      <dt>Soil</dt><dd>${esc(p.soil)}</dd>
-      <dt>Fertilizer</dt><dd>${esc(p.fert)}</dd>
-      <dt>Pruning</dt><dd>${esc(p.prune)}</dd>
-      <dt>Season</dt><dd>${esc(p.season)}</dd>
-      <dt>Tip</dt><dd>${esc(p.tips)}</dd>
-    </dl>`;
+    <div class="detail-head">
+      <div class="emoji-bubble">${p.emoji}</div>
+      <div>
+        <h2>${esc(p.name)}</h2>
+        <span class="sci">${esc(p.sci)}</span>
+        <span class="tag terra">${esc(p.type)}</span>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>Watering</b><span>${esc(p.water)}</span></div>
+      <div class="fact"><b>Sunlight</b><span>${esc(p.light)}</span></div>
+      <div class="fact"><b>Soil</b><span>${esc(p.soil)}</span></div>
+      <div class="fact"><b>Fertilizer</b><span>${esc(p.fert)}</span></div>
+      <div class="fact"><b>Pruning</b><span>${esc(p.prune)}</span></div>
+      <div class="fact"><b>Season</b><span>${esc(p.season)}</span></div>
+      <div class="fact"><b>Tip</b><span>${esc(p.tips)}</span></div>
+    </div>`;
   $("plant-list").classList.add("hidden");
   $("plant-detail").classList.remove("hidden");
   showTab("plants");
@@ -346,29 +438,7 @@ $("back-to-list").addEventListener("click", () => {
   $("plant-list").classList.remove("hidden");
 });
 
-// ---- API key ----
-function refreshKeyUI() {
-  const has = !!getKey();
-  $("key-card").classList.toggle("hidden", has);
-  $("key-change").classList.toggle("hidden", !has);
-  $("identify-btn").disabled = !has || !photoDataUrl;
-}
-$("key-save").addEventListener("click", () => {
-  const k = $("key-input").value.trim();
-  if (!k) { $("key-status").textContent = "Paste your key first."; return; }
-  if (!setKey(k)) { $("key-status").textContent = "This browser blocks saving. The key will need to be entered each time."; }
-  $("key-input").value = "";
-  $("key-status").textContent = "";
-  refreshKeyUI();
-  if (getKey()) $("identify-status").textContent = photoDataUrl ? "Ready. Tap Identify plant." : "Choose a photo first.";
-});
-$("key-change").addEventListener("click", () => {
-  clearKey();
-  $("identify-status").textContent = "Enter your key to continue.";
-  refreshKeyUI();
-});
-
-// ---- Identify: photo + search ----
+// ---- Identify: photo + Pl@ntNet ----
 let photoDataUrl = null;
 
 // Shrink the photo so the upload stays small and fast on mobile data
@@ -394,19 +464,20 @@ $("photo").addEventListener("change", async e => {
   const f = e.target.files[0];
   $("identify-results").innerHTML = "";
   photoDataUrl = null;
-  refreshKeyUI();
+  $("identify-btn").disabled = true;
   if (!f) return;
   const img = $("preview");
   img.src = URL.createObjectURL(f);
   img.style.display = "block";
-  $("identify-status").textContent = "Preparing photo...";
+  $("drop-text").textContent = "Photo selected";
+  $("identify-status").textContent = "Preparing photo…";
   try {
     photoDataUrl = await readPhoto(f);
-    $("identify-status").textContent = getKey() ? "Ready. Tap Identify plant." : "Enter your key to continue.";
+    $("identify-btn").disabled = false;
+    $("identify-status").textContent = "Ready. Tap Identify plant.";
   } catch (err) {
     $("identify-status").textContent = err.message;
   }
-  refreshKeyUI();
 });
 
 // Find our local plant that matches a Pl@ntNet result (same genus, or a shared common name)
@@ -419,16 +490,16 @@ function localMatch(r) {
   );
 }
 
-// Call Pl@ntNet directly from the phone with the user's own key
-async function identifyWithPlantNet(dataUrl, organ, key) {
+// Call Pl@ntNet directly from the phone
+async function identifyWithPlantNet(dataUrl, organ) {
   const blob = await (await fetch(dataUrl)).blob();
   const form = new FormData();
   form.append("images", blob, "photo.jpg");
   form.append("organs", organ);
-  const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(key)}&lang=en&include-related-images=false`;
+  const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(PLANTNET_KEY)}&lang=en&include-related-images=false`;
   const res = await fetch(url, { method: "POST", body: form });
   const data = await res.json().catch(() => ({}));
-  if (res.status === 401 || res.status === 403) throw new Error("Pl@ntNet rejected this key. Check it, or change the key.");
+  if (res.status === 401 || res.status === 403) throw new Error("The identification key was rejected. Let the app owner know.");
   if (res.status === 404) throw new Error("Pl@ntNet could not identify this photo. Try a clearer leaf or flower.");
   if (res.status === 429) throw new Error("Daily free limit reached. Try again tomorrow.");
   if (!res.ok) throw new Error(data.message || `Pl@ntNet error (${res.status})`);
@@ -442,30 +513,34 @@ async function identifyWithPlantNet(dataUrl, organ, key) {
 
 $("identify-btn").addEventListener("click", async () => {
   const btn = $("identify-btn");
-  const key = getKey();
-  if (!key || !photoDataUrl) return;
+  if (!photoDataUrl) return;
   btn.disabled = true;
-  $("identify-status").textContent = "Identifying...";
+  $("identify-status").textContent = "Identifying…";
   $("identify-results").innerHTML = "";
   try {
-    const results = await identifyWithPlantNet(photoDataUrl, $("organ").value, key);
+    const results = await identifyWithPlantNet(photoDataUrl, $("organ").value);
     if (!results.length) throw new Error("No match found. Try a clearer photo of the leaf or flower.");
-    $("identify-status").textContent = "Possible matches:";
+    $("identify-status").textContent = "Here's what it might be:";
     $("identify-results").innerHTML = results.map(r => {
       const local = localMatch(r);
       const names = r.commonNames.slice(0, 2).join(", ") || "No common name";
-      return `<div class="card">
-        <strong>${esc(r.scientificName)}</strong> <span class="tag">${r.score}%</span><br>
-        <span class="note">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</span>
-        ${local
-          ? `<p><button class="btn secondary" data-id="${local.id}">View ${esc(local.name)} care guide</button></p>`
-          : `<p class="note">Not in SEED's starter list yet.</p>`}
+      return `<div class="card" style="margin:10px 0 0;box-shadow:none">
+        <div class="match">
+          <div class="score">${r.score}%</div>
+          <div>
+            <div class="name">${esc(r.scientificName)}</div>
+            <div class="sub">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</div>
+            ${local
+              ? `<button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
+              : `<div class="sub" style="margin-top:6px">Not in SEED's starter list yet.</div>`}
+          </div>
+        </div>
       </div>`;
     }).join("");
   } catch (err) {
     $("identify-status").textContent = err.message;
   } finally {
-    refreshKeyUI();
+    btn.disabled = false;
   }
 });
 
@@ -477,7 +552,7 @@ $("search").addEventListener("input", () => {
   const q = $("search").value.trim().toLowerCase();
   const results = q ? PLANTS.filter(p => (p.name + " " + p.sci + " " + p.type).toLowerCase().includes(q)) : [];
   $("search-results").innerHTML = q
-    ? (results.length ? results.map(plantCard).join("") : `<p class="note">No match. Try another name.</p>`)
+    ? (results.length ? results.map(plantCard).join("") : `<p class="muted" style="grid-column:1/-1">No match. Try another name.</p>`)
     : "";
 });
 $("search-results").addEventListener("click", e => {
@@ -514,15 +589,15 @@ function checkPlacement() {
   if (struct === "close") caution.push(`Keep at least 2 m from walls or structures for airflow, roots and access.`);
   else good.push(`Distance from structures is fine.`);
 
-  let level = "good", title = `Suitable for ${p.name}`;
-  if (bad.length) { level = "bad"; title = `Not recommended for ${p.name}`; }
-  else if (caution.length) { level = "caution"; title = `Possible, with changes for ${p.name}`; }
+  let level = "good", title = `${p.name} will do well here`;
+  if (bad.length) { level = "bad"; title = `Not a good spot for ${p.name}`; }
+  else if (caution.length) { level = "caution"; title = `Possible, with a few changes`; }
 
   const block = (cls, heading, items) => items.length
-    ? `<div class="verdict ${cls}"><strong>${heading}</strong><ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>` : "";
+    ? `<div class="verdict ${cls}"><div class="title" style="font-size:15px">${heading}</div><ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>` : "";
 
   $("placement-result").innerHTML =
-    `<div class="verdict ${level}"><strong>${esc(title)}</strong></div>` +
+    `<div class="verdict ${level}"><div class="title">${esc(title)}</div></div>` +
     block("bad", "Problems", bad) +
     block("caution", "Things to adjust", caution) +
     block("good", "Looks good", good);
@@ -539,19 +614,21 @@ function renderServices() {
   const list = SERVICES.filter(s => (!t || s.type === t) &&
     (!q || (s.name + " " + s.area + " " + s.note).toLowerCase().includes(q)));
   $("service-list").innerHTML = list.length
-    ? list.map(s => `<div class="card"><strong>${esc(s.name)}</strong><br>
-        <span class="tag">${esc(s.type)}</span> <span class="note">${esc(s.area)}</span>
-        <p class="note">${esc(s.note)}</p></div>`).join("")
-    : `<p class="note">No services match.</p>`;
+    ? list.map(s => `<div class="card svc">
+        <div class="emoji-bubble">${s.emoji}</div>
+        <div>
+          <strong>${esc(s.name)}</strong>
+          <span class="tag">${esc(s.type)}</span><span class="muted"> · ${esc(s.area)}</span>
+          <div class="muted" style="margin-top:4px">${esc(s.note)}</div>
+        </div></div>`).join("")
+    : `<p class="muted">No services match.</p>`;
 }
 $("s-type").addEventListener("change", renderServices);
 $("s-q").addEventListener("input", renderServices);
 renderServices();
 
-// ---- Start up ----
-refreshKeyUI();
+// ---- Offline support (service worker). Fails quietly on plain http. ----
 if ("serviceWorker" in navigator) {
-  // Lets the app open offline and install to the home screen. Fails quietly on plain http.
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 </script>
