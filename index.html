@@ -162,6 +162,33 @@
   .about { font-size: 13.5px; color: var(--ink); margin: 6px 0 4px; }
   .about a { color: var(--forest); font-weight: 600; }
 
+  /* Photo tiles (real plant photos from Wikipedia, emoji until loaded) */
+  .ph { background: var(--sage); background-size: cover; background-position: center; display: grid; place-items: center; font-size: 40px; }
+  .hero-float { top: 22px; right: 16px; }
+  .hero-float .ph { width: 62px; height: 62px; border-radius: 50%; border: 3px solid rgba(255,255,255,.7); font-size: 26px; box-shadow: 0 6px 16px rgba(0,0,0,.18); transform: none; }
+  .hero-float .ph:nth-child(2) { margin-right: 28px; }
+  .hero-float .ph:nth-child(3) { margin-right: 10px; }
+  .hero-float span { display: none; }
+
+  .plant-btn { padding: 0; overflow: hidden; }
+  .plant-btn .ph { width: 100%; aspect-ratio: 4 / 3; border-radius: 0; font-size: 44px; }
+  .plant-btn .pb { padding: 12px 14px 14px; }
+  .plant-btn .emoji-bubble { display: none; }
+  .plant-btn strong { font-size: 16px; }
+
+  .detail-ph { width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; margin-bottom: 14px; font-size: 64px; }
+  .detail-head { margin-bottom: 0; }
+  .detail-head .emoji-bubble { display: none; }
+  .detail-head h2 { font-size: 26px; margin-bottom: 4px; }
+  .facts { margin-top: 14px; }
+
+  .chip i.ph { width: 34px; height: 34px; border-radius: 50%; font-size: 18px; }
+  .chip { padding: 5px 16px 5px 5px; }
+
+  .section-title { font-size: 22px; }
+  .card { border-radius: 20px; }
+  .btn { border-radius: 999px; }
+
   /* Home screen */
   .hero { padding-bottom: 54px; }
   .hero h1 { font-size: 34px; max-width: none; margin-top: 22px; }
@@ -212,12 +239,13 @@
   <h1>What's growing<br>around you?</h1>
   <p>Snap a plant, learn how to care for it, and find out where it will thrive.</p>
   <div class="hero-stats">
-    <span><b>11</b> plant guides</span>
+    <span><b id="plant-count">11</b> plants</span>
     <span><b>Free</b> photo ID</span>
-    <span><b>Sri Lanka</b> ready</span>
   </div>
   <div class="hero-float" aria-hidden="true">
-    <span>🌿</span><span>🍅</span><span>🌹</span>
+    <div class="ph hf" data-pid="tomato">🍅</div>
+    <div class="ph hf" data-pid="rose">🌹</div>
+    <div class="ph hf" data-pid="aloe">🌵</div>
   </div>
 </header>
 
@@ -316,7 +344,6 @@
       <input type="text" id="s-q" placeholder="Kandy, soil…">
     </div>
     <div id="service-list" class="grid" style="grid-template-columns:1fr"></div>
-    <p class="muted" style="margin:8px 4px">Sample listings for the demo. Replace with verified partners before release.</p>
   </section>
 </main>
 
@@ -458,12 +485,42 @@ function showTab(name) {
 document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
 
 // ---- Plant cards ----
+// ---- Photos: free Wikipedia images, loaded once and applied to every tile for that plant ----
+const WIKI_TITLE = {
+  aloe: "Aloe_vera", snake: "Dracaena_trifasciata", pothos: "Epipremnum_aureum", curry: "Murraya_koenigii",
+  tomato: "Solanum_lycopersicum", chili: "Capsicum_annuum", basil: "Ocimum_basilicum", mint: "Mentha_spicata",
+  rose: "Rose", jasmine: "Jasminum_sambac", lily: "Spathiphyllum_wallisii"
+};
+const PHOTO = {};
+
+function applyPhotos(root = document) {
+  for (const id in PHOTO) {
+    root.querySelectorAll(`[data-pid="${id}"]`).forEach(el => {
+      el.style.backgroundImage = `url("${PHOTO[id]}")`;
+      el.textContent = "";
+    });
+  }
+}
+
+async function loadPhotos() {
+  await Promise.all(Object.entries(WIKI_TITLE).map(async ([id, title]) => {
+    try {
+      const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + title);
+      const data = await res.json();
+      if (data.thumbnail?.source) PHOTO[id] = data.thumbnail.source;
+    } catch (e) { /* keep the emoji */ }
+  }));
+  applyPhotos();
+}
+
 function plantCard(p) {
   return `<button class="plant-btn" data-id="${p.id}">
-    <div class="emoji-bubble">${p.emoji}</div>
-    <strong>${esc(p.name)}</strong>
-    <span class="sci">${esc(p.sci)}</span>
-    <span class="tag">${esc(p.type)}</span>
+    <div class="ph" data-pid="${p.id}">${p.emoji}</div>
+    <div class="pb">
+      <strong>${esc(p.name)}</strong>
+      <span class="sci">${esc(p.sci)}</span>
+      <span class="tag">${esc(p.type)}</span>
+    </div>
   </button>`;
 }
 
@@ -471,6 +528,7 @@ function openPlant(id) {
   const p = PLANTS.find(x => x.id === id);
   if (!p) return;
   $("detail-card").innerHTML = `
+    <div class="ph detail-ph" data-pid="${p.id}">${p.emoji}</div>
     <div class="detail-head">
       <div class="emoji-bubble">${p.emoji}</div>
       <div>
@@ -488,6 +546,7 @@ function openPlant(id) {
       <div class="fact"><b>Season</b><span>${esc(p.season)}</span></div>
       <div class="fact"><b>Tip</b><span>${esc(p.tips)}</span></div>
     </div>`;
+  applyPhotos($("detail-card"));
   $("plant-list").classList.add("hidden");
   $("plant-detail").classList.remove("hidden");
   showTab("plants");
@@ -495,7 +554,10 @@ function openPlant(id) {
 
 $("plant-list").innerHTML = PLANTS.map(plantCard).join("");
 $("quick-chips").innerHTML = PLANTS.map(p =>
-  `<button class="chip" data-id="${p.id}"><i>${p.emoji}</i>${esc(p.name)}</button>`).join("");
+  `<button class="chip" data-id="${p.id}"><i class="ph" data-pid="${p.id}">${p.emoji}</i>${esc(p.name)}</button>`).join("");
+applyPhotos();
+$("plant-count").textContent = PLANTS.length;
+loadPhotos();
 $("quick-chips").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (b) openPlant(b.dataset.id);
 });
