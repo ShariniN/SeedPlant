@@ -12,263 +12,236 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>SEED - Smart Plant Assistant</title>
 <style>
   :root {
-    --bg: #f6f3ea; --card: #fffdf8; --ink: #1f2a22; --muted: #6b7a6d;
-    --forest: #1f4d3a; --forest-2: #2f6b52; --sage: #e3ebdc; --sage-2: #cfdcc6;
-    --terra: #c8643b; --terra-soft: #f7e3d7; --line: #e6e0d1;
-    --warn: #9a5b00; --warn-soft: #fbefd6; --bad: #a32d22; --bad-soft: #fbdfdb;
-    --radius: 18px; --shadow: 0 1px 2px rgba(31,42,34,.06), 0 8px 24px rgba(31,42,34,.06);
+    --bg: #f5f4ee; --card: #ffffff; --ink: #18221b; --muted: #6d7a70; --line: #e4e6dc;
+    --forest: #1f4d3a; --forest-2: #2f6b52; --sage: #e6eddc; --sage-2: #d3e0c8; --lime: #d9ec9a;
+    --terra: #c8643b; --terra-soft: #f6e4da;
+    --warn: #8a5a00; --warn-soft: #fbf0d4; --bad: #a32d22; --bad-soft: #fbe1dc;
+    --shadow: 0 1px 2px rgba(24,34,27,.05), 0 10px 26px rgba(24,34,27,.06);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #111a14; --card: #1a251d; --ink: #eef3ec; --muted: #9fb0a2;
-      --forest: #8fd1b0; --forest-2: #6fbf9a; --sage: #22332a; --sage-2: #2c4136;
-      --terra: #f0a27f; --terra-soft: #3a2a22; --line: #2a3a2f;
-      --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
-      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #111a14; --card: #1a251d; --ink: #eef3ec; --muted: #9fb0a2;
-    --forest: #8fd1b0; --forest-2: #6fbf9a; --sage: #22332a; --sage-2: #2c4136;
-    --terra: #f0a27f; --terra-soft: #3a2a22; --line: #2a3a2f;
-    --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
-  }
+  /* Light theme only, to match the design direction on every phone */
+  :root { color-scheme: light; }
+
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
     background: var(--bg); color: var(--ink);
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
-    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
-  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+  h1, h2, h3 { margin: 0; letter-spacing: -.02em; }
+  .hidden { display: none !important; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 
-  /* Hero */
-  .hero {
-    background: radial-gradient(120% 140% at 100% 0%, var(--forest-2) 0%, var(--forest) 55%, #163a2b 100%);
-    color: #f4f7f1; padding: 28px 20px 40px; position: relative; overflow: hidden;
-    border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
-  }
-  .hero::after { content: "🌿"; position: absolute; right: -10px; bottom: -22px; font-size: 130px; opacity: .14; transform: rotate(-18deg); pointer-events: none; }
-  .brand { display: flex; align-items: center; gap: 10px; font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 22px; letter-spacing: .04em; }
-  .brand-mark { width: 34px; height: 34px; border-radius: 10px; background: #f4f7f1; color: var(--forest); display: grid; place-items: center; font-size: 18px; }
-  .hero h1 { font-size: 30px; line-height: 1.15; margin-top: 18px; max-width: 16ch; }
-  .hero p { margin: 8px 0 0; opacity: .85; max-width: 32ch; }
-
-  main { padding: 0 16px; margin-top: -22px; max-width: 720px; margin-left: auto; margin-right: auto; position: relative; }
+  main { max-width: 720px; margin: 0 auto; padding: 0 18px; }
   section { display: none; }
   section.active { display: block; }
-  .section-title { font-size: 20px; margin: 22px 4px 12px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow); }
-  .card h3 { font-size: 17px; margin-bottom: 4px; }
-  .muted { color: var(--muted); font-size: 13.5px; }
-  .hidden { display: none !important; }
 
-  /* Photo drop zone */
-  .drop {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-    border: 2px dashed var(--sage-2); background: var(--sage); border-radius: 16px;
-    min-height: 150px; padding: 18px; text-align: center; cursor: pointer; position: relative; overflow: hidden;
+  /* Top bar */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 18px 6px; max-width: 720px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: .02em; }
+  .brand-mark { width: 36px; height: 36px; border-radius: 12px; background: var(--forest); color: var(--lime); display: grid; place-items: center; font-size: 18px; }
+  .round-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; font-size: 17px; }
+
+  .screen-head { margin: 18px 0 16px; }
+  .screen-head h2 { font-size: 30px; font-weight: 800; line-height: 1.1; }
+  .screen-head p { margin: 6px 0 0; color: var(--muted); }
+
+  /* Hero card (home) */
+  .hero {
+    background: var(--forest); color: #f3f7f0; border-radius: 26px; padding: 22px; position: relative; overflow: hidden; min-height: 190px;
   }
-  .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .drop .big { font-size: 34px; }
-  .drop strong { font-family: Fraunces, Georgia, serif; font-size: 17px; }
-  .preview { width: 100%; max-height: 280px; object-fit: cover; border-radius: 16px; display: none; margin-bottom: 4px; }
+  .hero h3 { font-size: 26px; font-weight: 800; line-height: 1.12; max-width: 14ch; margin-top: 8px; }
+  .hero .eyebrow { color: var(--lime); }
+  .hero .btn { margin-top: 16px; width: auto; display: inline-flex; background: var(--lime); color: var(--forest); box-shadow: none; }
+  .hero-photos { position: absolute; right: -6px; bottom: -6px; display: flex; }
+  .hero-photos .ph { width: 92px; height: 92px; border-radius: 26px; border: 3px solid var(--forest); margin-left: -22px; font-size: 40px; }
+  .hero-photos .ph:nth-child(2) { transform: translateY(-14px); }
 
+  .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .quick button {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 14px 12px; text-align: left;
+    font: inherit; font-size: 13.5px; font-weight: 600; color: var(--ink); cursor: pointer; box-shadow: var(--shadow);
+  }
+  .quick .ico { width: 36px; height: 36px; border-radius: 12px; background: var(--sage); display: grid; place-items: center; font-size: 17px; margin-bottom: 10px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); }
+  .section-row { display: flex; align-items: baseline; justify-content: space-between; margin: 24px 2px 12px; }
+  .section-row h3 { font-size: 19px; font-weight: 800; }
+  .section-row a { color: var(--forest); font-weight: 600; font-size: 14px; text-decoration: none; }
+
+  /* Photo tiles (real Wikipedia photos; emoji until loaded) */
+  .ph { background: var(--sage); background-size: cover; background-position: center; display: grid; place-items: center; font-size: 40px; }
+
+  /* Chips */
+  .chips { display: flex; gap: 10px; overflow-x: auto; padding: 2px 18px 8px; margin: 0 -18px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px 16px 5px 5px; font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer;
+  }
+  .chip .ph { width: 34px; height: 34px; border-radius: 50%; font-size: 18px; }
+  .pills { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 10px 0 0; }
+  .pills::-webkit-scrollbar { display: none; }
+  .pill { flex: none; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 8px 14px; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .pill.on { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+  /* Forms */
   select, input[type="text"] {
-    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
     background: var(--bg); color: var(--ink); font: inherit; font-size: 16px; margin-bottom: 12px; appearance: none;
   }
   select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
-  label { font-size: 13px; font-weight: 600; color: var(--muted); display: block; margin: 0 0 6px; }
+  label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; margin: 0 0 7px; }
 
   .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    background: var(--forest); color: #fff; border: 0; padding: 13px 20px; border-radius: 14px;
-    font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%;
-    box-shadow: 0 6px 16px rgba(31,77,58,.25); transition: transform .08s ease, opacity .2s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+    background: var(--forest); color: #fff; border: 0; padding: 15px 20px; border-radius: 999px;
+    font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; transition: transform .08s ease, opacity .2s;
   }
   .btn:active { transform: scale(.98); }
-  .btn:disabled { opacity: .45; cursor: default; box-shadow: none; }
-  .btn.ghost { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); box-shadow: none; width: auto; padding: 10px 16px; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.ghost { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); width: auto; padding: 10px 16px; font-size: 14px; }
 
-  .status { font-size: 13.5px; color: var(--muted); margin: 12px 2px 4px; min-height: 20px; }
+  /* Scanner (photo drop) */
+  .drop {
+    position: relative; border-radius: 20px; background: var(--sage); border: 1.5px dashed var(--sage-2);
+    min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    text-align: center; padding: 18px; cursor: pointer; overflow: hidden;
+  }
+  .drop input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+  .drop .big { width: 60px; height: 60px; border-radius: 20px; background: var(--forest); display: grid; place-items: center; font-size: 28px; margin-bottom: 6px; }
+  .drop strong { font-size: 16px; }
+  .drop-preview { width: 100%; max-height: 260px; object-fit: cover; border-radius: 20px; display: none; margin-bottom: 4px; }
+  .status { font-size: 13.5px; color: var(--muted); margin: 12px 2px 0; min-height: 20px; }
 
-  /* Result cards */
-  .match { display: flex; gap: 12px; align-items: flex-start; }
-  .score { min-width: 54px; height: 54px; border-radius: 16px; background: var(--sage); color: var(--forest); display: grid; place-items: center; font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 16px; }
-  .match .name { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 16px; }
-  .match .sub { color: var(--muted); font-size: 13px; }
+  .steps { display: flex; gap: 8px; margin: 0 0 14px; }
+  .step { flex: 1; font-size: 12.5px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+  .step span { width: 22px; height: 22px; border-radius: 50%; background: var(--terra); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none; }
+
+  /* Match results */
+  .match { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 18px; background: var(--bg); border: 1px solid var(--line); margin-top: 10px; }
+  .score { min-width: 56px; height: 56px; border-radius: 18px; background: var(--forest); color: var(--lime); display: grid; place-items: center; font-weight: 800; font-size: 16px; }
+  .match .name { font-weight: 800; font-size: 16px; }
+  .match .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .about { font-size: 13.5px; margin: 8px 0 6px; }
+  .about a { color: var(--forest); font-weight: 600; }
   .match .btn { margin-top: 10px; }
 
-  /* Plant grid */
+  /* Plant grid + cards */
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (min-width: 620px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
   .plant-btn {
-    text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 14px; color: var(--ink); cursor: pointer; font: inherit; box-shadow: var(--shadow);
+    text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 0; overflow: hidden;
+    color: var(--ink); cursor: pointer; font: inherit; box-shadow: var(--shadow);
   }
   .plant-btn:active { transform: scale(.98); }
-  .emoji-bubble { width: 52px; height: 52px; border-radius: 16px; background: var(--sage); display: grid; place-items: center; font-size: 26px; margin-bottom: 10px; }
-  .plant-btn strong { font-family: Fraunces, Georgia, serif; font-size: 15.5px; display: block; line-height: 1.25; }
+  .plant-btn .ph { width: 100%; aspect-ratio: 4 / 3; border-radius: 0; font-size: 44px; }
+  .plant-btn .pb { padding: 12px 14px 14px; }
+  .plant-btn strong { display: block; font-size: 15px; font-weight: 700; line-height: 1.25; }
   .sci { font-style: italic; color: var(--muted); font-size: 12.5px; display: block; margin-top: 2px; }
-  .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--sage); color: var(--forest); margin: 8px 6px 0 0; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--sage); color: var(--forest); margin-top: 8px; }
   .tag.terra { background: var(--terra-soft); color: var(--terra); }
 
-  /* Plant detail */
-  .detail-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
-  .detail-head .emoji-bubble { width: 70px; height: 70px; font-size: 36px; margin: 0; flex: none; }
-  .detail-head h2 { font-size: 24px; line-height: 1.15; }
-  .facts { display: grid; gap: 10px; margin-top: 6px; }
-  .fact { background: var(--bg); border-radius: 14px; padding: 12px 14px; }
-  .fact b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--forest); margin-bottom: 2px; }
+  .detail-ph { width: 100%; aspect-ratio: 16 / 10; border-radius: 22px; font-size: 64px; margin-bottom: 16px; }
+  .detail-title h2 { font-size: 28px; font-weight: 800; line-height: 1.1; }
+  .facts { display: grid; gap: 10px; margin-top: 14px; }
+  .fact { background: var(--bg); border-radius: 16px; padding: 13px 15px; }
+  .fact b { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--forest); margin-bottom: 3px; }
   .fact span { font-size: 14.5px; }
   .back { margin-bottom: 12px; }
 
-  /* Placement verdicts */
-  .verdict { border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; }
-  .verdict .title { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 17px; }
-  .verdict.good { background: var(--sage); color: var(--forest); }
+  /* Placement */
+  .verdict { border-radius: 22px; padding: 18px; margin: 14px 0 10px; }
+  .verdict.good { background: var(--forest); color: #f3f7f0; }
   .verdict.caution { background: var(--warn-soft); color: var(--warn); }
   .verdict.bad { background: var(--bad-soft); color: var(--bad); }
-  .verdict ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink); font-size: 14px; }
-  .verdict li + li { margin-top: 4px; }
-  .verdict .sub { font-size: 13px; color: var(--ink); opacity: .75; margin-top: 2px; }
+  .verdict .title { font-size: 19px; font-weight: 800; line-height: 1.2; }
+  .verdict .eyebrow { color: inherit; opacity: .75; }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .check { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 13px; }
+  .check .dot { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+  .check.ok .dot { background: var(--sage); color: var(--forest); }
+  .check.warn .dot { background: var(--warn-soft); color: var(--warn); }
+  .check.bad .dot { background: var(--bad-soft); color: var(--bad); }
+  .check b { display: block; font-size: 14px; }
+  .check span { font-size: 12.5px; color: var(--muted); }
+  .notes { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; font-size: 14px; }
+  .notes li + li { margin-top: 6px; }
+  .notes ul { margin: 0; padding-left: 18px; }
 
   /* Services */
-  .svc { display: flex; gap: 12px; align-items: center; }
-  .svc .emoji-bubble { margin: 0; flex: none; }
-  .svc strong { font-family: Fraunces, Georgia, serif; font-size: 16px; display: block; }
+  .svc { display: flex; gap: 14px; align-items: center; }
+  .svc .ico { width: 56px; height: 56px; border-radius: 18px; background: var(--sage); display: grid; place-items: center; font-size: 26px; flex: none; }
+  .svc strong { font-size: 16px; display: block; line-height: 1.25; }
+  .svc .meta { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .svc .note-line { font-size: 13.5px; margin-top: 6px; }
+  .svc .disclaim { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
 
-  /* Bottom tab bar (app-style) */
+  /* Bottom tab bar */
   nav {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
-    background: var(--card); border-top: 1px solid var(--line);
-    padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
-    box-shadow: 0 -6px 20px rgba(31,42,34,.06);
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 12px; width: min(calc(100% - 24px), 560px); z-index: 10;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 8px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 26px; box-shadow: 0 10px 30px rgba(24,34,27,.12);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
   }
   nav button {
-    border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600;
-    display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; cursor: pointer; border-radius: 12px;
+    border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11.5px; font-weight: 600;
+    display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; cursor: pointer; border-radius: 18px;
   }
-  nav button .ic { font-size: 20px; line-height: 1; }
-  nav button.active { color: var(--forest); background: var(--sage); }
-  .about { font-size: 13.5px; color: var(--ink); margin: 6px 0 4px; }
-  .about a { color: var(--forest); font-weight: 600; }
-
-  /* Photo tiles (real plant photos from Wikipedia, emoji until loaded) */
-  .ph { background: var(--sage); background-size: cover; background-position: center; display: grid; place-items: center; font-size: 40px; }
-  .hero-float { top: 22px; right: 16px; }
-  .hero-float .ph { width: 62px; height: 62px; border-radius: 50%; border: 3px solid rgba(255,255,255,.7); font-size: 26px; box-shadow: 0 6px 16px rgba(0,0,0,.18); transform: none; }
-  .hero-float .ph:nth-child(2) { margin-right: 28px; }
-  .hero-float .ph:nth-child(3) { margin-right: 10px; }
-  .hero-float span { display: none; }
-
-  .plant-btn { padding: 0; overflow: hidden; }
-  .plant-btn .ph { width: 100%; aspect-ratio: 4 / 3; border-radius: 0; font-size: 44px; }
-  .plant-btn .pb { padding: 12px 14px 14px; }
-  .plant-btn .emoji-bubble { display: none; }
-  .plant-btn strong { font-size: 16px; }
-
-  .detail-ph { width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; margin-bottom: 14px; font-size: 64px; }
-  .detail-head { margin-bottom: 0; }
-  .detail-head .emoji-bubble { display: none; }
-  .detail-head h2 { font-size: 26px; margin-bottom: 4px; }
-  .facts { margin-top: 14px; }
-
-  .chip i.ph { width: 34px; height: 34px; border-radius: 50%; font-size: 18px; }
-  .chip { padding: 5px 16px 5px 5px; }
-
-  .section-title { font-size: 22px; }
-  .card { border-radius: 20px; }
-  .btn { border-radius: 999px; }
-
-  /* Home screen */
-  .hero { padding-bottom: 54px; }
-  .hero h1 { font-size: 34px; max-width: none; margin-top: 22px; }
-  .hero p { font-size: 15px; max-width: 34ch; }
-  .hero-stats { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
-  .hero-stats span {
-    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2);
-    padding: 6px 12px; border-radius: 999px; font-size: 13px; backdrop-filter: blur(4px);
-  }
-  .hero-stats b { font-weight: 700; }
-  .hero-float { position: absolute; right: 18px; top: 26px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; pointer-events: none; }
-  .hero-float span {
-    width: 52px; height: 52px; border-radius: 18px; background: rgba(255,255,255,.16);
-    display: grid; place-items: center; font-size: 26px; transform: rotate(6deg);
-  }
-  .hero-float span:nth-child(2) { transform: rotate(-8deg) translateX(-18px); }
-  .hero-float span:nth-child(3) { transform: rotate(4deg) translateX(6px); }
-  .hero::after { display: none; }
-
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-  .step {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 10px;
-    font-size: 12.5px; font-weight: 600; color: var(--muted); text-align: center; line-height: 1.3;
-  }
-  .step span {
-    display: grid; place-items: center; width: 26px; height: 26px; margin: 0 auto 6px; border-radius: 50%;
-    background: var(--terra); color: #fff; font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 13px;
-  }
-
-  .scan-card { background: linear-gradient(180deg, var(--card) 0%, var(--sage) 180%); }
-  .drop { border-color: var(--forest-2); background: var(--card); min-height: 170px; }
-  .drop .big { width: 64px; height: 64px; border-radius: 22px; background: var(--forest); display: grid; place-items: center; font-size: 30px; margin-bottom: 4px; }
-
-  .chips-title { font-size: 15px; margin: 18px 0 10px; }
-  .chips { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 8px; margin: 0 -4px; scroll-snap-type: x mandatory; }
-  .chips::-webkit-scrollbar { display: none; }
-  .chip {
-    flex: none; scroll-snap-align: start; display: flex; align-items: center; gap: 8px;
-    background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px 6px 6px;
-    font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer;
-  }
-  .chip i { font-style: normal; width: 34px; height: 34px; border-radius: 50%; background: var(--sage); display: grid; place-items: center; font-size: 18px; }
+  nav button .ic { font-size: 19px; line-height: 1; }
+  nav button.active { color: var(--forest); background: var(--sage); font-weight: 700; }
 </style>
 </head>
 <body>
-<header class="hero">
+
+<div class="topbar">
   <div class="brand"><span class="brand-mark">🌱</span> SEED</div>
-  <h1>What's growing<br>around you?</h1>
-  <p>Snap a plant, learn how to care for it, and find out where it will thrive.</p>
-  <div class="hero-stats">
-    <span><b id="plant-count">11</b> plants</span>
-    <span><b>Free</b> photo ID</span>
-  </div>
-  <div class="hero-float" aria-hidden="true">
-    <div class="ph hf" data-pid="tomato">🍅</div>
-    <div class="ph hf" data-pid="rose">🌹</div>
-    <div class="ph hf" data-pid="aloe">🌵</div>
-  </div>
-</header>
+  <button class="round-btn" aria-label="Search" data-tab="plants">🔎</button>
+</div>
 
 <main>
-  <!-- IDENTIFY -->
+  <!-- HOME / IDENTIFY -->
   <section id="identify" class="active">
-    <div class="steps">
-      <div class="step"><span>1</span>Snap a photo</div>
-      <div class="step"><span>2</span>Pick the plant part</div>
-      <div class="step"><span>3</span>Get the care guide</div>
+    <div class="hero" style="margin-top:12px">
+      <div class="eyebrow">Your growing companion</div>
+      <h3>A little green goes a long way.</h3>
+      <button class="btn" id="hero-scan" style="width:auto;background:var(--lime);color:var(--forest);margin-top:16px">Identify a plant →</button>
+      <div class="hero-photos" aria-hidden="true">
+        <div class="ph" data-pid="tomato">🍅</div>
+        <div class="ph" data-pid="rose">🌹</div>
+        <div class="ph" data-pid="aloe">🌵</div>
+      </div>
     </div>
 
-    <div class="card scan-card">
-      <label for="photo">Plant photo</label>
+    <div class="quick">
+      <button data-go="identify-card"><div class="ico">📸</div>Identify</button>
+      <button data-tab="plants"><div class="ico">📖</div>Care guide</button>
+      <button data-tab="placement"><div class="ico">📍</div>Plant a spot</button>
+    </div>
+
+    <div id="identify-card" class="card" style="margin-top:18px">
+      <div class="steps">
+        <div class="step"><span>1</span>Snap</div>
+        <div class="step"><span>2</span>Pick part</div>
+        <div class="step"><span>3</span>Learn</div>
+      </div>
+      <label>Plant photo</label>
       <div class="drop" id="drop">
         <div class="big">📸</div>
         <strong id="drop-text">Tap to take or choose a photo</strong>
         <span class="muted">A close-up of a leaf or flower works best</span>
         <input type="file" id="photo" accept="image/*" capture="environment">
       </div>
-      <img id="preview" class="preview" alt="Plant preview">
+      <img id="preview" class="drop-preview" alt="Plant preview">
 
-      <label for="organ" style="margin-top:14px">Which part is it?</label>
+      <div style="height:14px"></div>
+      <label for="organ">Which part is it?</label>
       <select id="organ">
         <option value="leaf">Leaf</option>
         <option value="flower">Flower</option>
@@ -282,28 +255,35 @@
       <div id="identify-results"></div>
     </div>
 
-    <div class="card">
-      <label for="search">Or search by name</label>
-      <input type="text" id="search" placeholder="tomato, Solanum, money plant…">
-      <div id="search-results" class="grid"></div>
-      <h3 class="chips-title">Popular plants</h3>
-      <div id="quick-chips" class="chips"></div>
-    </div>
+    <div class="section-row"><h3>Popular plants</h3><a href="#" data-tab="plants">See all</a></div>
+    <div id="quick-chips" class="chips"></div>
   </section>
 
-  <!-- PLANT GUIDE -->
+  <!-- GUIDE -->
   <section id="plants">
-    <h2 class="section-title">Plant guide</h2>
+    <div class="screen-head">
+      <div class="eyebrow">Explore</div>
+      <h2>Plant guide</h2>
+      <p>Care basics for common plants.</p>
+    </div>
+    <div class="card" style="padding:12px;margin-bottom:14px">
+      <input type="text" id="search" placeholder="Search tomato, Solanum, money plant…" style="margin:0">
+      <div id="search-results" class="grid" style="margin-top:12px"></div>
+    </div>
     <div id="plant-list" class="grid"></div>
     <div id="plant-detail" class="hidden">
-      <button class="btn ghost back" id="back-to-list">&larr; All plants</button>
+      <button class="btn ghost back" id="back-to-list">← All plants</button>
       <div class="card" id="detail-card"></div>
     </div>
   </section>
 
   <!-- PLACEMENT -->
   <section id="placement">
-    <h2 class="section-title">Will it grow here?</h2>
+    <div class="screen-head">
+      <div class="eyebrow">Smart placement</div>
+      <h2>Find its happy place.</h2>
+      <p>Tell us about the spot and we'll check whether it suits the plant.</p>
+    </div>
     <div class="card">
       <label for="p-plant">Plant</label>
       <select id="p-plant"></select>
@@ -336,29 +316,31 @@
 
   <!-- SERVICES -->
   <section id="services">
-    <h2 class="section-title">Local services</h2>
-    <div class="card">
-      <label for="s-type">Service type</label>
-      <select id="s-type"></select>
-      <label for="s-q">Search by name or area</label>
-      <input type="text" id="s-q" placeholder="Kandy, soil…">
+    <div class="screen-head">
+      <div class="eyebrow">Growing support, nearby</div>
+      <h2>Find your people.</h2>
+      <p>Nurseries, soil labs and garden consultants in Sri Lanka.</p>
     </div>
-    <div id="service-list" class="grid" style="grid-template-columns:1fr"></div>
+    <div class="card" style="padding:12px;margin-bottom:6px">
+      <input type="text" id="s-q" placeholder="Name or area, e.g. Colombo, soil" style="margin:0">
+    </div>
+    <div class="pills" id="s-pills"></div>
+    <div id="service-list" style="margin-top:14px"></div>
   </section>
 </main>
 
 <nav>
-  <button data-tab="identify" class="active"><span class="ic">📷</span>Identify</button>
-  <button data-tab="plants"><span class="ic">📖</span>Guide</button>
+  <button data-tab="identify" class="active"><span class="ic">🏠</span>Home</button>
+  <button data-tab="plants"><span class="ic">🔍</span>Guide</button>
   <button data-tab="placement"><span class="ic">📍</span>Placement</button>
-  <button data-tab="services"><span class="ic">🧺</span>Services</button>
+  <button data-tab="services"><span class="ic">🏪</span>Services</button>
 </nav>
 
 <script>
 // ---- Pl@ntNet key (free tier, 500 identifications/day) ----
 const PLANTNET_KEY = "2b10gXLHBOAJwDM2h65CVJU1";
 
-// ---- Data: 10 starter plants (Sri Lanka-friendly) ----
+// ---- Data: 11 starter plants (Sri Lanka-friendly) ----
 const PLANTS = [
   { id: "aloe", name: "Aloe Vera", sci: "Aloe barbadensis", emoji: "🌵", type: "Succulent",
     sun: "full", space: "small", drainage: "good", struct: "ok",
@@ -483,8 +465,15 @@ function showTab(name) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+document.querySelectorAll("[data-tab]").forEach(b => {
+  if (!b.closest("nav")) b.addEventListener("click", e => { e.preventDefault(); showTab(b.dataset.tab); });
+});
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+  showTab("identify");
+  $(b.dataset.go).scrollIntoView({ behavior: "smooth" });
+}));
+$("hero-scan").addEventListener("click", () => $("identify-card").scrollIntoView({ behavior: "smooth" }));
 
-// ---- Plant cards ----
 // ---- Photos: free Wikipedia images, loaded once and applied to every tile for that plant ----
 const WIKI_TITLE = {
   aloe: "Aloe_vera", snake: "Dracaena_trifasciata", pothos: "Epipremnum_aureum", curry: "Murraya_koenigii",
@@ -513,6 +502,7 @@ async function loadPhotos() {
   applyPhotos();
 }
 
+// ---- Plant guide ----
 function plantCard(p) {
   return `<button class="plant-btn" data-id="${p.id}">
     <div class="ph" data-pid="${p.id}">${p.emoji}</div>
@@ -529,13 +519,10 @@ function openPlant(id) {
   if (!p) return;
   $("detail-card").innerHTML = `
     <div class="ph detail-ph" data-pid="${p.id}">${p.emoji}</div>
-    <div class="detail-head">
-      <div class="emoji-bubble">${p.emoji}</div>
-      <div>
-        <h2>${esc(p.name)}</h2>
-        <span class="sci">${esc(p.sci)}</span>
-        <span class="tag terra">${esc(p.type)}</span>
-      </div>
+    <div class="detail-title">
+      <div class="eyebrow">${esc(p.type)}</div>
+      <h2>${esc(p.name)}</h2>
+      <span class="sci">${esc(p.sci)}</span>
     </div>
     <div class="facts">
       <div class="fact"><b>Watering</b><span>${esc(p.water)}</span></div>
@@ -553,20 +540,31 @@ function openPlant(id) {
 }
 
 $("plant-list").innerHTML = PLANTS.map(plantCard).join("");
-$("quick-chips").innerHTML = PLANTS.map(p =>
-  `<button class="chip" data-id="${p.id}"><i class="ph" data-pid="${p.id}">${p.emoji}</i>${esc(p.name)}</button>`).join("");
-applyPhotos();
-$("plant-count").textContent = PLANTS.length;
-loadPhotos();
-$("quick-chips").addEventListener("click", e => {
-  const b = e.target.closest(".chip"); if (b) openPlant(b.dataset.id);
-});
 $("plant-list").addEventListener("click", e => {
   const b = e.target.closest(".plant-btn"); if (b) openPlant(b.dataset.id);
 });
 $("back-to-list").addEventListener("click", () => {
   $("plant-detail").classList.add("hidden");
   $("plant-list").classList.remove("hidden");
+});
+$("quick-chips").innerHTML = PLANTS.map(p =>
+  `<button class="chip" data-id="${p.id}"><i class="ph" data-pid="${p.id}">${p.emoji}</i>${esc(p.name)}</button>`).join("");
+$("quick-chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (b) openPlant(b.dataset.id);
+});
+$("plant-count") && ($("plant-count").textContent = PLANTS.length);
+applyPhotos();
+loadPhotos();
+
+$("search").addEventListener("input", () => {
+  const q = $("search").value.trim().toLowerCase();
+  const results = q ? PLANTS.filter(p => (p.name + " " + p.sci + " " + p.type).toLowerCase().includes(q)) : [];
+  $("search-results").innerHTML = q
+    ? (results.length ? results.map(plantCard).join("") : `<p class="muted" style="grid-column:1/-1">No match. Try another name.</p>`)
+    : "";
+});
+$("search-results").addEventListener("click", e => {
+  const b = e.target.closest(".plant-btn"); if (b) openPlant(b.dataset.id);
 });
 
 // ---- Identify: photo + Pl@ntNet ----
@@ -642,41 +640,6 @@ async function identifyWithPlantNet(dataUrl, organ) {
   }));
 }
 
-$("identify-btn").addEventListener("click", async () => {
-  const btn = $("identify-btn");
-  if (!photoDataUrl) return;
-  btn.disabled = true;
-  $("identify-status").textContent = "Identifying…";
-  $("identify-results").innerHTML = "";
-  try {
-    const results = await identifyWithPlantNet(photoDataUrl, $("organ").value);
-    if (!results.length) throw new Error("No match found. Try a clearer photo of the leaf or flower.");
-    $("identify-status").textContent = "Here's what it might be:";
-    $("identify-results").innerHTML = results.map(r => {
-      const local = localMatch(r);
-      const names = r.commonNames.slice(0, 2).join(", ") || "No common name";
-      return `<div class="card" style="margin:10px 0 0;box-shadow:none">
-        <div class="match">
-          <div class="score">${r.score}%</div>
-          <div>
-            <div class="name">${esc(r.scientificName)}</div>
-            <div class="sub">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</div>
-            <p class="about">Loading description…</p>
-            ${local
-              ? `<button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
-              : `<div class="sub" style="margin-top:6px">No SEED care guide for this plant yet.</div>`}
-          </div>
-        </div>
-      </div>`;
-    }).join("");
-    loadDescriptions();
-  } catch (err) {
-    $("identify-status").textContent = err.message;
-  } finally {
-    btn.disabled = false;
-  }
-});
-
 // Fill in each result's description from Wikipedia (free, no key). Missing pages are fine.
 async function loadDescriptions() {
   const cards = [...document.querySelectorAll("#identify-results .about")];
@@ -694,19 +657,41 @@ async function loadDescriptions() {
   }));
 }
 
-$("identify-results").addEventListener("click", e => {
-  const b = e.target.closest("button[data-id]"); if (b) openPlant(b.dataset.id);
+$("identify-btn").addEventListener("click", async () => {
+  const btn = $("identify-btn");
+  if (!photoDataUrl) return;
+  btn.disabled = true;
+  $("identify-status").textContent = "Identifying…";
+  $("identify-results").innerHTML = "";
+  try {
+    const results = await identifyWithPlantNet(photoDataUrl, $("organ").value);
+    if (!results.length) throw new Error("No match found. Try a clearer photo of the leaf or flower.");
+    $("identify-status").textContent = "Here's what it might be:";
+    $("identify-results").innerHTML = results.map(r => {
+      const local = localMatch(r);
+      const names = r.commonNames.slice(0, 2).join(", ") || "No common name";
+      return `<div class="match">
+          <div class="score">${r.score}%</div>
+          <div style="min-width:0">
+            <div class="name">${esc(r.scientificName)}</div>
+            <div class="sub">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</div>
+            <p class="about">Loading description…</p>
+            ${local
+              ? `<button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
+              : `<div class="sub">No SEED care guide for this plant yet.</div>`}
+          </div>
+        </div>`;
+    }).join("");
+    loadDescriptions();
+  } catch (err) {
+    $("identify-status").textContent = err.message;
+  } finally {
+    btn.disabled = false;
+  }
 });
 
-$("search").addEventListener("input", () => {
-  const q = $("search").value.trim().toLowerCase();
-  const results = q ? PLANTS.filter(p => (p.name + " " + p.sci + " " + p.type).toLowerCase().includes(q)) : [];
-  $("search-results").innerHTML = q
-    ? (results.length ? results.map(plantCard).join("") : `<p class="muted" style="grid-column:1/-1">No match. Try another name.</p>`)
-    : "";
-});
-$("search-results").addEventListener("click", e => {
-  const b = e.target.closest(".plant-btn"); if (b) openPlant(b.dataset.id);
+$("identify-results").addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]"); if (b) openPlant(b.dataset.id);
 });
 
 // ---- Placement ----
@@ -722,59 +707,76 @@ function checkPlacement() {
   const sun = $("p-sun").value, space = $("p-space").value;
   const drain = $("p-drain").value, struct = $("p-struct").value;
 
-  const bad = [], caution = [], good = [];
+  // Each factor gets a status: ok, warn (adjust) or bad (not suitable)
+  const checks = [];
+  const notes = [];
+  const bad = [], caution = [];
 
   const sunDiff = SUN_LEVEL[p.sun] - SUN_LEVEL[sun];
-  if (sunDiff >= 2) bad.push(`${p.name} needs ${SUN_TEXT[p.sun]}, but this spot gets ${SUN_TEXT[sun]}.`);
-  else if (sunDiff === 1) caution.push(`This spot gets less sun than ideal (${SUN_TEXT[sun]} vs ${SUN_TEXT[p.sun]} preferred).`);
-  else good.push(`Sunlight is suitable.`);
+  if (sunDiff >= 2) { checks.push({ k: "Light", s: "bad", t: "Too shady" }); bad.push(`${p.name} needs ${SUN_TEXT[p.sun]}, but this spot gets ${SUN_TEXT[sun]}.`); }
+  else if (sunDiff === 1) { checks.push({ k: "Light", s: "warn", t: "A bit shady" }); caution.push(`This spot gets less sun than ideal (${SUN_TEXT[sun]} vs ${SUN_TEXT[p.sun]} preferred).`); }
+  else checks.push({ k: "Light", s: "ok", t: "Suitable" });
 
   const spaceDiff = SPACE_LEVEL[p.space] - SPACE_LEVEL[space];
-  if (spaceDiff > 0) bad.push(`${p.name} needs ${SPACE_TEXT[p.space]} space; this location is ${SPACE_TEXT[space]}.`);
-  else good.push(`Space is enough.`);
+  if (spaceDiff > 0) { checks.push({ k: "Space", s: "bad", t: "Too small" }); bad.push(`${p.name} needs ${SPACE_TEXT[p.space]} space; this location is ${SPACE_TEXT[space]}.`); }
+  else checks.push({ k: "Space", s: "ok", t: "Enough room" });
 
-  if (p.drainage === "good" && drain === "poor") caution.push(`Poor drainage can cause root rot. Improve drainage or use a raised bed or pot.`);
-  else good.push(`Drainage is suitable.`);
+  if (p.drainage === "good" && drain === "poor") { checks.push({ k: "Drainage", s: "warn", t: "Poor" }); caution.push("Poor drainage can cause root rot. Improve drainage or use a raised bed or pot."); }
+  else checks.push({ k: "Drainage", s: "ok", t: "Suitable" });
 
-  if (struct === "close") caution.push(`Keep at least 2 m from walls or structures for airflow, roots and access.`);
-  else good.push(`Distance from structures is fine.`);
+  if (struct === "close") { checks.push({ k: "Clearance", s: "warn", t: "Too close" }); caution.push("Keep at least 2 m from walls or structures for airflow, roots and access."); }
+  else checks.push({ k: "Clearance", s: "ok", t: "Fine" });
 
-  let level = "good", title = `${p.name} will do well here`;
-  if (bad.length) { level = "bad"; title = `Not a good spot for ${p.name}`; }
-  else if (caution.length) { level = "caution"; title = `Possible, with a few changes`; }
+  let level = "good", title = `${p.name} will do well here`, eyebrow = "Looks like a good fit";
+  if (bad.length) { level = "bad"; title = `Not a good spot for ${p.name}`; eyebrow = "Not recommended"; }
+  else if (caution.length) { level = "caution"; title = "Possible, with a few changes"; eyebrow = "Almost there"; }
 
-  const block = (cls, heading, items) => items.length
-    ? `<div class="verdict ${cls}"><div class="title" style="font-size:15px">${heading}</div><ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>` : "";
-
-  $("placement-result").innerHTML =
-    `<div class="verdict ${level}"><div class="title">${esc(title)}</div></div>` +
-    block("bad", "Problems", bad) +
-    block("caution", "Things to adjust", caution) +
-    block("good", "Looks good", good);
+  const glyph = { ok: "✓", warn: "!", bad: "✕" };
+  const list = [...bad, ...caution];
+  $("placement-result").innerHTML = `
+    <div class="verdict ${level}">
+      <div class="eyebrow">${esc(eyebrow)}</div>
+      <div class="title">${esc(title)}</div>
+    </div>
+    <div class="checks">
+      ${checks.map(c => `<div class="check ${c.s}"><div class="dot">${glyph[c.s]}</div><b>${esc(c.k)}</b><span>${esc(c.t)}</span></div>`).join("")}
+    </div>
+    ${list.length
+      ? `<div class="notes"><b>Things to adjust</b><ul>${list.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`
+      : `<div class="notes">${esc(p.tips)}</div>`}`;
 }
 $("check-btn").addEventListener("click", checkPlacement);
 
 // ---- Services ----
-const serviceTypes = [...new Set(SERVICES.map(s => s.type))];
-$("s-type").innerHTML = `<option value="">All</option>` + serviceTypes.map(t => `<option>${esc(t)}</option>`).join("");
+let serviceType = "";
+const serviceTypes = ["", ...new Set(SERVICES.map(s => s.type))];
+const TYPE_LABEL = { "": "All services" };
+$("s-pills").innerHTML = serviceTypes.map(t =>
+  `<button class="pill ${t === "" ? "on" : ""}" data-type="${esc(t)}">${esc(TYPE_LABEL[t] || t)}</button>`).join("");
+$("s-pills").addEventListener("click", e => {
+  const b = e.target.closest(".pill"); if (!b) return;
+  serviceType = b.dataset.type;
+  $("s-pills").querySelectorAll(".pill").forEach(x => x.classList.toggle("on", x === b));
+  renderServices();
+});
+
+const SERVICE_ICON = { "Nursery": "🪴", "Soil testing": "🧪", "Consultant": "📐" };
 
 function renderServices() {
-  const t = $("s-type").value;
   const q = $("s-q").value.trim().toLowerCase();
-  const list = SERVICES.filter(s => (!t || s.type === t) &&
+  const list = SERVICES.filter(s => (!serviceType || s.type === serviceType) &&
     (!q || (s.name + " " + s.area + " " + s.note).toLowerCase().includes(q)));
   $("service-list").innerHTML = list.length
     ? list.map(s => `<div class="card svc">
-        <div class="emoji-bubble">${s.emoji}</div>
-        <div>
+        <div class="ico">${SERVICE_ICON[s.type] || s.emoji}</div>
+        <div style="min-width:0">
           <strong>${esc(s.name)}</strong>
-          <span class="tag">${esc(s.type)}</span><span class="muted"> · ${esc(s.area)}</span>
-          <div class="muted" style="margin-top:4px">${esc(s.note)}</div>
-          <div class="muted" style="margin-top:6px;font-size:12px">Listed publicly. Confirm details before visiting.</div>
+          <div class="meta">${esc(s.type)} · ${esc(s.area)}</div>
+          <div class="note-line">${esc(s.note)}</div>
+          <div class="disclaim">Listed publicly. Confirm details before visiting.</div>
         </div></div>`).join("")
     : `<p class="muted">No services match.</p>`;
 }
-$("s-type").addEventListener("change", renderServices);
 $("s-q").addEventListener("input", renderServices);
 renderServices();
 
