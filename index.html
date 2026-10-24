@@ -131,6 +131,8 @@
   .match .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
   .about { font-size: 13.5px; margin: 8px 0 6px; }
   .about a { color: var(--forest); font-weight: 600; }
+  .general { font-size: 13.5px; margin: 6px 0 10px; padding-left: 18px; }
+  .general li + li { margin-top: 4px; }
   .match .btn { margin-top: 10px; }
 
   /* Plant grid + cards */
@@ -451,8 +453,66 @@ const SERVICES = [
   { name: "Bamber and Bruce (Pvt) Ltd", type: "Soil testing", area: "Colombo 10", emoji: "🧪", note: "Soil testing, water quality and microbiology (registered lab)" },
   { name: "University of Kelaniya, Central Instrument Lab", type: "Soil testing", area: "Kelaniya", emoji: "🔬", note: "Soil, plant and fertilizer analysis. Ask if outside samples are accepted" },
   { name: "Design Consortium (Pvt) Ltd", type: "Consultant", area: "Colombo", emoji: "📐", note: "Architecture and landscaping design" },
-  { name: "Garden Doctor Landscaping Expert", type: "Consultant", area: "Malabe", emoji: "🌳", note: "Landscape gardening, plants and garden care" }
+  { name: "Garden Doctor Landscaping Expert", type: "Gardeners", area: "Malabe", emoji: "🌳", note: "Landscape gardening, plants and garden care" },
+  { name: "The Balcony Project", type: "Gardeners", area: "Colombo", emoji: "🪴", note: "Plant care for homes and businesses: watering, pruning, fertilizing and pest control (per its listing)" }
 ];
+
+// ---- Growth facts, per plant (general botanical knowledge, check before release) ----
+const GROWTH = {
+  aloe:    { habit: "Clumping succulent rosette", height: "30–60 cm", rate: "Slow", lifespan: "Several years", outdoors: "Yes, in full sun with sharp drainage" },
+  snake:   { habit: "Upright, sword-shaped leaves", height: "60–120 cm", rate: "Slow", lifespan: "Many years", outdoors: "Part shade outdoors; indoors in heavy rain" },
+  pothos:  { habit: "Trailing or climbing vine", height: "2 m+ when supported", rate: "Fast", lifespan: "Many years", outdoors: "Yes, in shade; move indoors in heavy rain" },
+  curry:   { habit: "Shrub or small tree", height: "2–6 m", rate: "Moderate", lifespan: "Many years", outdoors: "Yes, in full sun" },
+  tomato:  { habit: "Bush or vine (grown as an annual)", height: "0.6–2 m", rate: "Fast", lifespan: "One growing season", outdoors: "Yes, best in dry spells" },
+  chili:   { habit: "Small shrub (grown as an annual)", height: "0.5–1.2 m", rate: "Moderate", lifespan: "1–3 years", outdoors: "Yes, in full sun and warmth" },
+  basil:   { habit: "Leafy herb", height: "30–60 cm", rate: "Fast", lifespan: "One growing season", outdoors: "Yes, in sun; shelter from heavy rain" },
+  mint:    { habit: "Spreading herb", height: "30–60 cm", rate: "Fast", lifespan: "Several years", outdoors: "Yes, in partial shade; spreads quickly" },
+  rose:    { habit: "Flowering shrub", height: "0.5–2 m", rate: "Moderate", lifespan: "Many years", outdoors: "Yes, in full sun with good airflow" },
+  jasmine: { habit: "Shrub or climbing vine", height: "1–3 m", rate: "Moderate", lifespan: "Many years", outdoors: "Yes, in full sun" },
+  lily:    { habit: "Clumping leafy plant", height: "40–90 cm", rate: "Moderate", lifespan: "Many years", outdoors: "Mostly indoors or in shade" }
+};
+
+// ---- Seasons in Sri Lanka. Colombo's heavy-rain months are roughly May–June and October–November;
+// dry spells fall in between. Check local rainfall for your area. ----
+const SEASONAL = {
+  aloe:    { dry: "Water deeper but less often; full sun suits it.", wet: "Move under cover or raise the pot. Overwatering rots the roots." },
+  snake:   { dry: "Water every 3–4 weeks; can take some morning sun.", wet: "Water sparingly and keep out of standing rain." },
+  pothos:  { dry: "Water about weekly; mist if indoor air is very dry.", wet: "Water less and move to a sheltered spot." },
+  curry:   { dry: "Water regularly and mulch to hold moisture.", wet: "Check drainage and prune after the rains to keep airflow." },
+  tomato:  { dry: "Best season. Water deeply every 2–3 days and keep it staked.", wet: "Disease risk rises. Keep leaves dry and mulch the soil." },
+  chili:   { dry: "Water regularly; shade from the harshest afternoon sun.", wet: "Stop waterlogging and watch for fungal leaf spots." },
+  basil:   { dry: "Water often and harvest regularly to keep it bushy.", wet: "Protect from heavy rain; grow in pots you can move." },
+  mint:    { dry: "Water more often; partial shade keeps it lush.", wet: "Watch for root rot in pots and trim for airflow." },
+  rose:    { dry: "Deep water weekly, mulch, and watch for pests.", wet: "Prune for airflow and treat for black spot." },
+  jasmine: { dry: "Water deeply; this is the main flowering time.", wet: "Avoid waterlogging and prune after flowering." },
+  lily:    { dry: "Keep soil lightly moist; mist leaves in dry indoor air.", wet: "Water less often and keep out of cold draughts." }
+};
+
+// Used for identified plants without a SEED care guide. Not specific to the species.
+const GENERAL_CARE = [
+  "Water when the top 2–3 cm of soil is dry, not on a fixed schedule.",
+  "Start with bright, indirect light, and check the species' own light needs before moving it into full sun.",
+  "Use well-draining soil and never leave the pot standing in water.",
+  "Remove dead or yellow leaves, and check the leaves underneath for pests.",
+  "Search the species name for its care needs, or add it to SEED when a guide is ready."
+];
+
+function growthHTML(id) {
+  const g = GROWTH[id];
+  if (!g) return `<div class="section-row"><h3>Growth</h3></div><p class="muted">Growth details aren't available for this plant yet.</p>`;
+  const items = [["Habit", g.habit], ["Mature height", g.height], ["Growth rate", g.rate], ["Lifespan", g.lifespan], ["Outdoors in Sri Lanka", g.outdoors]];
+  return `<div class="section-row"><h3>Growth</h3></div><div class="facts">${items.map(([k, v]) =>
+    `<div class="fact"><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>`;
+}
+
+function seasonalHTML(id) {
+  const s = SEASONAL[id];
+  if (!s) return "";
+  return `<div class="section-row"><h3>Through the seasons</h3></div><div class="facts">
+    <div class="fact"><b>Dry spells</b><span>${esc(s.dry)}</span></div>
+    <div class="fact"><b>Heavy-rain months</b><span>${esc(s.wet)}</span></div>
+  </div>`;
+}
 
 // ---- Helpers ----
 const $ = (id) => document.getElementById(id);
@@ -530,9 +590,10 @@ function openPlant(id) {
       <div class="fact"><b>Soil</b><span>${esc(p.soil)}</span></div>
       <div class="fact"><b>Fertilizer</b><span>${esc(p.fert)}</span></div>
       <div class="fact"><b>Pruning</b><span>${esc(p.prune)}</span></div>
-      <div class="fact"><b>Season</b><span>${esc(p.season)}</span></div>
       <div class="fact"><b>Tip</b><span>${esc(p.tips)}</span></div>
-    </div>`;
+    </div>
+    ${growthHTML(p.id)}
+    ${seasonalHTML(p.id)}`;
   applyPhotos($("detail-card"));
   $("plant-list").classList.add("hidden");
   $("plant-detail").classList.remove("hidden");
@@ -677,8 +738,11 @@ $("identify-btn").addEventListener("click", async () => {
             <div class="sub">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</div>
             <p class="about">Loading description…</p>
             ${local
-              ? `<button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
-              : `<div class="sub">No SEED care guide for this plant yet.</div>`}
+              ? `<div class="sub">${esc(GROWTH[local.id].habit)} · up to ${esc(GROWTH[local.id].height)}</div>
+                 <button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
+              : `<div class="sub">No SEED care guide for this plant yet. General care tips:</div>
+                 <ul class="general">${GENERAL_CARE.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+                 <div class="sub">Growth details aren't available for this plant yet.</div>`}
           </div>
         </div>`;
     }).join("");
@@ -760,7 +824,7 @@ $("s-pills").addEventListener("click", e => {
   renderServices();
 });
 
-const SERVICE_ICON = { "Nursery": "🪴", "Soil testing": "🧪", "Consultant": "📐" };
+const SERVICE_ICON = { "Nursery": "🪴", "Soil testing": "🧪", "Consultant": "📐", "Gardeners": "🌿" };
 
 function renderServices() {
   const q = $("s-q").value.trim().toLowerCase();
