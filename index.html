@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2e7d4f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SEED">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>SEED - Smart Plant Assistant</title>
+<style>
+  :root {
+    --bg: #f5f8f2; --card: #ffffff; --text: #1d2b1f; --muted: #5d6e60;
+    --brand: #2e7d4f; --brand-soft: #dff1e5; --warn: #b26a00; --warn-soft: #fff1d6; --bad: #b3261e; --bad-soft: #fde2e0;
+    --border: #d9e3da;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101812; --card: #18231b; --text: #e6efe7; --muted: #9db0a1;
+      --brand: #6fcf97; --brand-soft: #1f3a29; --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
+      --border: #2c3d30;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101812; --card: #18231b; --text: #e6efe7; --muted: #9db0a1;
+    --brand: #6fcf97; --brand-soft: #1f3a29; --warn: #f2b35c; --warn-soft: #3a2c12; --bad: #f28b82; --bad-soft: #3d1f1d;
+    --border: #2c3d30;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.45; }
+  header { background: var(--brand); color: #fff; padding: 16px; }
+  header h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+  header p { margin: 2px 0 0; font-size: 13px; opacity: .9; }
+  nav { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; }
+  nav button { border: 1px solid var(--border); background: transparent; color: var(--text); padding: 8px 14px; border-radius: 999px; font-size: 14px; white-space: nowrap; cursor: pointer; }
+  nav button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  main { padding: 16px; max-width: 720px; margin: 0 auto; }
+  section { display: none; }
+  section.active { display: block; }
+  h2 { font-size: 18px; margin: 4px 0 12px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  input[type="text"], input[type="password"], select, input[type="file"] { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 16px; margin-bottom: 10px; }
+  label { font-size: 14px; color: var(--muted); display: block; margin-bottom: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .plant-btn { text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; color: var(--text); cursor: pointer; font: inherit; }
+  .plant-btn:hover { border-color: var(--brand); }
+  .emoji { font-size: 28px; }
+  .sci { font-style: italic; color: var(--muted); font-size: 13px; }
+  .tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); margin: 2px 4px 2px 0; }
+  .btn { background: var(--brand); color: #fff; border: 0; padding: 10px 16px; border-radius: 10px; font-size: 15px; cursor: pointer; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.secondary { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
+  .preview { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; margin-top: 10px; display: none; }
+  dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; margin: 0; font-size: 15px; }
+  dt { color: var(--muted); }
+  dd { margin: 0; }
+  .verdict { padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+  .verdict.good { background: var(--brand-soft); color: var(--brand); }
+  .verdict.caution { background: var(--warn-soft); color: var(--warn); }
+  .verdict.bad { background: var(--bad-soft); color: var(--bad); }
+  .verdict ul { margin: 6px 0 0 18px; padding: 0; color: var(--text); font-size: 14px; }
+  .note { font-size: 13px; color: var(--muted); }
+  .hidden { display: none !important; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>SEED</h1>
+  <p>Plant smarter. Grow better.</p>
+</header>
+
+<nav>
+  <button data-tab="identify" class="active">Identify</button>
+  <button data-tab="plants">Plant Guide</button>
+  <button data-tab="placement">Placement</button>
+  <button data-tab="services">Services</button>
+</nav>
+
+<main>
+  <!-- IDENTIFY -->
+  <section id="identify" class="active">
+    <h2>Identify a plant</h2>
+
+    <!-- API key setup (shown until a key is saved) -->
+    <div class="card hidden" id="key-card">
+      <label for="key-input">Pl@ntNet API key</label>
+      <input type="password" id="key-input" placeholder="Paste your key" autocomplete="off">
+      <div class="row">
+        <button class="btn" id="key-save">Save key</button>
+        <span class="note">Stored only on this phone. Get a free key at my-api.plantnet.org.</span>
+      </div>
+      <p class="note" id="key-status"></p>
+    </div>
+
+    <div class="card">
+      <label for="photo">Take or upload a photo</label>
+      <input type="file" id="photo" accept="image/*" capture="environment">
+      <img id="preview" class="preview" alt="Plant preview">
+      <label for="organ">What part of the plant is in the photo?</label>
+      <select id="organ">
+        <option value="leaf">Leaf</option>
+        <option value="flower">Flower</option>
+        <option value="fruit">Fruit</option>
+        <option value="bark">Bark</option>
+        <option value="habit">Whole plant</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="row">
+        <button class="btn" id="identify-btn" disabled>Identify plant</button>
+        <button class="btn secondary hidden" id="key-change">Change API key</button>
+      </div>
+      <p class="note" id="identify-status">Choose a photo first.</p>
+      <div id="identify-results"></div>
+    </div>
+
+    <div class="card">
+      <label for="search">Or search by name (common or scientific)</label>
+      <input type="text" id="search" placeholder="e.g. tomato, Solanum, money plant">
+      <div id="search-results" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- PLANT GUIDE -->
+  <section id="plants">
+    <div id="plant-list" class="grid"></div>
+    <div id="plant-detail" class="hidden">
+      <button class="btn secondary" id="back-to-list" style="margin-bottom:12px">&larr; All plants</button>
+      <div class="card" id="detail-card"></div>
+    </div>
+  </section>
+
+  <!-- PLACEMENT -->
+  <section id="placement">
+    <h2>Is this location suitable?</h2>
+    <div class="card">
+      <label for="p-plant">Plant</label>
+      <select id="p-plant"></select>
+      <label for="p-sun">Direct sunlight per day</label>
+      <select id="p-sun">
+        <option value="low">Less than 3 hours (shade)</option>
+        <option value="partial">3 to 5 hours (partial sun)</option>
+        <option value="full">More than 6 hours (full sun)</option>
+      </select>
+      <label for="p-space">Available space</label>
+      <select id="p-space">
+        <option value="small">Small (pot, windowsill)</option>
+        <option value="medium">Medium (balcony, small bed)</option>
+        <option value="large">Large (garden, field)</option>
+      </select>
+      <label for="p-drain">Drainage</label>
+      <select id="p-drain">
+        <option value="good">Good (water drains quickly)</option>
+        <option value="poor">Poor (water pools or stays wet)</option>
+      </select>
+      <label for="p-struct">Distance from walls or structures</label>
+      <select id="p-struct">
+        <option value="ok">More than 2 m away</option>
+        <option value="close">Less than 2 m away</option>
+      </select>
+      <button class="btn" id="check-btn">Check suitability</button>
+    </div>
+    <div id="placement-result"></div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <h2>Verified agricultural services</h2>
+    <div class="card">
+      <label for="s-type">Service type</label>
+      <select id="s-type"></select>
+      <label for="s-q">Search by name or area</label>
+      <input type="text" id="s-q" placeholder="e.g. Kandy, soil">
+    </div>
+    <div id="service-list" class="grid"></div>
+    <p class="note">Listings are sample entries. Replace them with real verified partners before release.</p>
+  </section>
+</main>
+
+<script>
+// ---- Data: 10 starter plants (Sri Lanka-friendly) ----
+const PLANTS = [
+  { id: "aloe", name: "Aloe Vera", sci: "Aloe barbadensis", emoji: "🌵", type: "Succulent",
+    sun: "full", space: "small", drainage: "good", struct: "ok",
+    water: "Every 2–3 weeks. Let soil dry fully between waterings.",
+    light: "Bright, direct sun for 6+ hours.",
+    soil: "Sandy, well-draining cactus mix.",
+    fert: "Once a month in growing season, diluted.",
+    prune: "Remove dead or yellowing lower leaves.",
+    season: "Grows year-round; avoid heavy rain exposure.",
+    tips: "Overwatering is the most common cause of rot." },
+  { id: "snake", name: "Snake Plant", sci: "Dracaena trifasciata", emoji: "🪴", type: "Indoor",
+    sun: "partial", space: "small", drainage: "good", struct: "ok",
+    water: "Every 2–4 weeks. Tolerates neglect.",
+    light: "Low to bright indirect light.",
+    soil: "Well-draining potting mix.",
+    fert: "Twice a year in spring and summer.",
+    prune: "Cut damaged leaves at the base.",
+    season: "Thrives indoors all year.",
+    tips: "Good for rooms with little natural light." },
+  { id: "pothos", name: "Money Plant (Pothos)", sci: "Epipremnum aureum", emoji: "🍃", type: "Climber",
+    sun: "partial", space: "small", drainage: "good", struct: "ok",
+    water: "When top 2–3 cm of soil is dry, usually weekly.",
+    light: "Bright indirect light; keep out of harsh midday sun.",
+    soil: "Peat-based mix with perlite.",
+    fert: "Every 2 months in growing season.",
+    prune: "Trim long vines to encourage bushier growth.",
+    season: "Grows year-round in Sri Lanka's warm climate.",
+    tips: "Cuttings root easily in water." },
+  { id: "curry", name: "Curry Leaf", sci: "Murraya koenigii", emoji: "🌿", type: "Herb / Tree",
+    sun: "full", space: "medium", drainage: "good", struct: "ok",
+    water: "Regular watering; keep soil lightly moist, not soggy.",
+    light: "Full sun, 6+ hours.",
+    soil: "Loamy, well-draining soil with compost.",
+    fert: "Organic compost every 2–3 months.",
+    prune: "Pick leaves regularly; prune to shape after harvest.",
+    season: "Best growth in the warm, wet months.",
+    tips: "A common home-garden plant with strong yields." },
+  { id: "tomato", name: "Tomato", sci: "Solanum lycopersicum", emoji: "🍅", type: "Vegetable",
+    sun: "full", space: "medium", drainage: "good", struct: "ok",
+    water: "Deep watering 2–3 times a week; keep soil even.",
+    light: "Full sun, 6–8 hours.",
+    soil: "Fertile, well-draining loam, pH 6–7.",
+    fert: "High-potassium feed once fruit sets.",
+    prune: "Remove suckers and lower leaves that touch soil.",
+    season: "Best in the dry season with support stakes.",
+    tips: "Stake or cage plants early to avoid breakage." },
+  { id: "chili", name: "Chili", sci: "Capsicum annuum", emoji: "🌶️", type: "Vegetable",
+    sun: "full", space: "small", drainage: "good", struct: "ok",
+    water: "Moderate. Let the top layer dry between waterings.",
+    light: "Full sun, 6+ hours.",
+    soil: "Light, well-draining potting or garden soil.",
+    fert: "Balanced feed every 3 weeks while flowering.",
+    prune: "Pinch growing tips when plants are young.",
+    season: "Grows well in warm months.",
+    tips: "Works well in pots on a sunny balcony." },
+  { id: "basil", name: "Basil", sci: "Ocimum basilicum", emoji: "🌱", type: "Herb",
+    sun: "full", space: "small", drainage: "good", struct: "ok",
+    water: "Water when the top soil feels dry; keep evenly moist.",
+    light: "Full sun, 6+ hours.",
+    soil: "Rich, well-draining soil.",
+    fert: "Light feed every 4 weeks.",
+    prune: "Pinch off flower buds and tips to keep leaves coming.",
+    season: "Warm weather; protect from cold winds.",
+    tips: "Harvest from the top to keep the plant bushy." },
+  { id: "mint", name: "Mint", sci: "Mentha spicata", emoji: "🌿", type: "Herb",
+    sun: "partial", space: "small", drainage: "good", struct: "close",
+    water: "Keep soil consistently moist.",
+    light: "Partial shade to full sun.",
+    soil: "Moist, rich soil.",
+    fert: "Compost in spring.",
+    prune: "Cut back regularly to prevent spreading.",
+    season: "Grows well in most seasons.",
+    tips: "Grow in a pot: mint spreads aggressively in beds." },
+  { id: "rose", name: "Rose", sci: "Rosa spp.", emoji: "🌹", type: "Flowering shrub",
+    sun: "full", space: "medium", drainage: "good", struct: "ok",
+    water: "Deep watering 2–3 times a week; water at the base.",
+    light: "Full sun, 6+ hours.",
+    soil: "Loamy, well-draining soil, pH 6–7.",
+    fert: "Rose fertilizer every 4–6 weeks in growing season.",
+    prune: "Prune dead wood and crossing stems after flowering.",
+    season: "Best flowering in the cooler months.",
+    tips: "Good air flow reduces fungal disease." },
+  { id: "jasmine", name: "Jasmine", sci: "Jasminum sambac", emoji: "🤍", type: "Flowering shrub",
+    sun: "full", space: "medium", drainage: "good", struct: "ok",
+    water: "Regular watering; avoid waterlogging.",
+    light: "Full sun to light shade.",
+    soil: "Well-draining, slightly acidic soil.",
+    fert: "Balanced feed every 6 weeks while flowering.",
+    prune: "Prune after flowering to shape.",
+    season: "Blooms through the warm months.",
+    tips: "Needs a trellis or support to climb." },
+  { id: "lily", name: "Peace Lily", sci: "Spathiphyllum wallisii", emoji: "🌸", type: "Indoor",
+    sun: "low", space: "small", drainage: "good", struct: "ok",
+    water: "Water when the top soil is dry; leaves droop when thirsty.",
+    light: "Low to medium indirect light.",
+    soil: "Peat-based, moisture-retaining mix.",
+    fert: "Every 6–8 weeks in growing season.",
+    prune: "Remove yellow leaves and spent flowers.",
+    season: "Thrives indoors year-round.",
+    tips: "Good for shady corners and offices." }
+];
+
+const SERVICES = [
+  { name: "Green Roots Nursery", type: "Nursery", area: "Colombo", note: "Potted plants, herbs and seedlings" },
+  { name: "Hill Country Soil Lab", type: "Soil testing", area: "Kandy", note: "Soil pH and nutrient testing" },
+  { name: "Garden Plan Co.", type: "Consultant", area: "Galle", note: "Landscaping and garden layout advice" }
+];
+
+// ---- Helpers ----
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Storage can be blocked (private mode), so every access is wrapped
+function getKey() { try { return localStorage.getItem("plantnetKey") || ""; } catch (e) { return ""; } }
+function setKey(k) { try { localStorage.setItem("plantnetKey", k); return true; } catch (e) { return false; } }
+function clearKey() { try { localStorage.removeItem("plantnetKey"); } catch (e) {} }
+
+// ---- Tabs ----
+function showTab(name) {
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+  document.querySelectorAll("section").forEach(s => s.classList.toggle("active", s.id === name));
+}
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+
+// ---- Plant cards ----
+function plantCard(p) {
+  return `<button class="plant-btn" data-id="${p.id}">
+    <div class="emoji">${p.emoji}</div>
+    <strong>${esc(p.name)}</strong><br>
+    <span class="sci">${esc(p.sci)}</span><br>
+    <span class="tag">${esc(p.type)}</span>
+  </button>`;
+}
+
+function openPlant(id) {
+  const p = PLANTS.find(x => x.id === id);
+  if (!p) return;
+  $("detail-card").innerHTML = `
+    <div class="emoji">${p.emoji}</div>
+    <h2>${esc(p.name)}</h2>
+    <p class="sci">${esc(p.sci)} · ${esc(p.type)}</p>
+    <dl>
+      <dt>Watering</dt><dd>${esc(p.water)}</dd>
+      <dt>Sunlight</dt><dd>${esc(p.light)}</dd>
+      <dt>Soil</dt><dd>${esc(p.soil)}</dd>
+      <dt>Fertilizer</dt><dd>${esc(p.fert)}</dd>
+      <dt>Pruning</dt><dd>${esc(p.prune)}</dd>
+      <dt>Season</dt><dd>${esc(p.season)}</dd>
+      <dt>Tip</dt><dd>${esc(p.tips)}</dd>
+    </dl>`;
+  $("plant-list").classList.add("hidden");
+  $("plant-detail").classList.remove("hidden");
+  showTab("plants");
+}
+
+$("plant-list").innerHTML = PLANTS.map(plantCard).join("");
+$("plant-list").addEventListener("click", e => {
+  const b = e.target.closest(".plant-btn"); if (b) openPlant(b.dataset.id);
+});
+$("back-to-list").addEventListener("click", () => {
+  $("plant-detail").classList.add("hidden");
+  $("plant-list").classList.remove("hidden");
+});
+
+// ---- API key ----
+function refreshKeyUI() {
+  const has = !!getKey();
+  $("key-card").classList.toggle("hidden", has);
+  $("key-change").classList.toggle("hidden", !has);
+  $("identify-btn").disabled = !has || !photoDataUrl;
+}
+$("key-save").addEventListener("click", () => {
+  const k = $("key-input").value.trim();
+  if (!k) { $("key-status").textContent = "Paste your key first."; return; }
+  if (!setKey(k)) { $("key-status").textContent = "This browser blocks saving. The key will need to be entered each time."; }
+  $("key-input").value = "";
+  $("key-status").textContent = "";
+  refreshKeyUI();
+  if (getKey()) $("identify-status").textContent = photoDataUrl ? "Ready. Tap Identify plant." : "Choose a photo first.";
+});
+$("key-change").addEventListener("click", () => {
+  clearKey();
+  $("identify-status").textContent = "Enter your key to continue.";
+  refreshKeyUI();
+});
+
+// ---- Identify: photo + search ----
+let photoDataUrl = null;
+
+// Shrink the photo so the upload stays small and fast on mobile data
+function readPhoto(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, 1024 / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Could not read that image")); };
+    img.src = url;
+  });
+}
+
+$("photo").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  $("identify-results").innerHTML = "";
+  photoDataUrl = null;
+  refreshKeyUI();
+  if (!f) return;
+  const img = $("preview");
+  img.src = URL.createObjectURL(f);
+  img.style.display = "block";
+  $("identify-status").textContent = "Preparing photo...";
+  try {
+    photoDataUrl = await readPhoto(f);
+    $("identify-status").textContent = getKey() ? "Ready. Tap Identify plant." : "Enter your key to continue.";
+  } catch (err) {
+    $("identify-status").textContent = err.message;
+  }
+  refreshKeyUI();
+});
+
+// Find our local plant that matches a Pl@ntNet result (same genus, or a shared common name)
+function localMatch(r) {
+  const genus = r.scientificName.split(" ")[0].toLowerCase();
+  const common = r.commonNames.map(c => c.toLowerCase());
+  return PLANTS.find(p =>
+    p.sci.split(" ")[0].toLowerCase() === genus ||
+    common.some(c => p.name.toLowerCase().split(" ").some(w => w.length > 3 && c.includes(w)))
+  );
+}
+
+// Call Pl@ntNet directly from the phone with the user's own key
+async function identifyWithPlantNet(dataUrl, organ, key) {
+  const blob = await (await fetch(dataUrl)).blob();
+  const form = new FormData();
+  form.append("images", blob, "photo.jpg");
+  form.append("organs", organ);
+  const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(key)}&lang=en&include-related-images=false`;
+  const res = await fetch(url, { method: "POST", body: form });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401 || res.status === 403) throw new Error("Pl@ntNet rejected this key. Check it, or change the key.");
+  if (res.status === 404) throw new Error("Pl@ntNet could not identify this photo. Try a clearer leaf or flower.");
+  if (res.status === 429) throw new Error("Daily free limit reached. Try again tomorrow.");
+  if (!res.ok) throw new Error(data.message || `Pl@ntNet error (${res.status})`);
+  return (data.results || []).slice(0, 5).map(x => ({
+    scientificName: x.species?.scientificNameWithoutAuthor || "",
+    commonNames: x.species?.commonNames || [],
+    family: x.species?.family?.scientificNameWithoutAuthor || "",
+    score: Math.round((x.score || 0) * 100)
+  }));
+}
+
+$("identify-btn").addEventListener("click", async () => {
+  const btn = $("identify-btn");
+  const key = getKey();
+  if (!key || !photoDataUrl) return;
+  btn.disabled = true;
+  $("identify-status").textContent = "Identifying...";
+  $("identify-results").innerHTML = "";
+  try {
+    const results = await identifyWithPlantNet(photoDataUrl, $("organ").value, key);
+    if (!results.length) throw new Error("No match found. Try a clearer photo of the leaf or flower.");
+    $("identify-status").textContent = "Possible matches:";
+    $("identify-results").innerHTML = results.map(r => {
+      const local = localMatch(r);
+      const names = r.commonNames.slice(0, 2).join(", ") || "No common name";
+      return `<div class="card">
+        <strong>${esc(r.scientificName)}</strong> <span class="tag">${r.score}%</span><br>
+        <span class="note">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</span>
+        ${local
+          ? `<p><button class="btn secondary" data-id="${local.id}">View ${esc(local.name)} care guide</button></p>`
+          : `<p class="note">Not in SEED's starter list yet.</p>`}
+      </div>`;
+    }).join("");
+  } catch (err) {
+    $("identify-status").textContent = err.message;
+  } finally {
+    refreshKeyUI();
+  }
+});
+
+$("identify-results").addEventListener("click", e => {
+  const b = e.target.closest("button[data-id]"); if (b) openPlant(b.dataset.id);
+});
+
+$("search").addEventListener("input", () => {
+  const q = $("search").value.trim().toLowerCase();
+  const results = q ? PLANTS.filter(p => (p.name + " " + p.sci + " " + p.type).toLowerCase().includes(q)) : [];
+  $("search-results").innerHTML = q
+    ? (results.length ? results.map(plantCard).join("") : `<p class="note">No match. Try another name.</p>`)
+    : "";
+});
+$("search-results").addEventListener("click", e => {
+  const b = e.target.closest(".plant-btn"); if (b) openPlant(b.dataset.id);
+});
+
+// ---- Placement ----
+$("p-plant").innerHTML = PLANTS.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join("");
+
+const SUN_LEVEL = { low: 0, partial: 1, full: 2 };
+const SPACE_LEVEL = { small: 0, medium: 1, large: 2 };
+const SUN_TEXT = { low: "less than 3 hours of sun", partial: "3–5 hours of sun", full: "6+ hours of sun" };
+const SPACE_TEXT = { small: "small", medium: "medium", large: "large" };
+
+function checkPlacement() {
+  const p = PLANTS.find(x => x.id === $("p-plant").value);
+  const sun = $("p-sun").value, space = $("p-space").value;
+  const drain = $("p-drain").value, struct = $("p-struct").value;
+
+  const bad = [], caution = [], good = [];
+
+  const sunDiff = SUN_LEVEL[p.sun] - SUN_LEVEL[sun];
+  if (sunDiff >= 2) bad.push(`${p.name} needs ${SUN_TEXT[p.sun]}, but this spot gets ${SUN_TEXT[sun]}.`);
+  else if (sunDiff === 1) caution.push(`This spot gets less sun than ideal (${SUN_TEXT[sun]} vs ${SUN_TEXT[p.sun]} preferred).`);
+  else good.push(`Sunlight is suitable.`);
+
+  const spaceDiff = SPACE_LEVEL[p.space] - SPACE_LEVEL[space];
+  if (spaceDiff > 0) bad.push(`${p.name} needs ${SPACE_TEXT[p.space]} space; this location is ${SPACE_TEXT[space]}.`);
+  else good.push(`Space is enough.`);
+
+  if (p.drainage === "good" && drain === "poor") caution.push(`Poor drainage can cause root rot. Improve drainage or use a raised bed or pot.`);
+  else good.push(`Drainage is suitable.`);
+
+  if (struct === "close") caution.push(`Keep at least 2 m from walls or structures for airflow, roots and access.`);
+  else good.push(`Distance from structures is fine.`);
+
+  let level = "good", title = `Suitable for ${p.name}`;
+  if (bad.length) { level = "bad"; title = `Not recommended for ${p.name}`; }
+  else if (caution.length) { level = "caution"; title = `Possible, with changes for ${p.name}`; }
+
+  const block = (cls, heading, items) => items.length
+    ? `<div class="verdict ${cls}"><strong>${heading}</strong><ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>` : "";
+
+  $("placement-result").innerHTML =
+    `<div class="verdict ${level}"><strong>${esc(title)}</strong></div>` +
+    block("bad", "Problems", bad) +
+    block("caution", "Things to adjust", caution) +
+    block("good", "Looks good", good);
+}
+$("check-btn").addEventListener("click", checkPlacement);
+
+// ---- Services ----
+const serviceTypes = [...new Set(SERVICES.map(s => s.type))];
+$("s-type").innerHTML = `<option value="">All</option>` + serviceTypes.map(t => `<option>${esc(t)}</option>`).join("");
+
+function renderServices() {
+  const t = $("s-type").value;
+  const q = $("s-q").value.trim().toLowerCase();
+  const list = SERVICES.filter(s => (!t || s.type === t) &&
+    (!q || (s.name + " " + s.area + " " + s.note).toLowerCase().includes(q)));
+  $("service-list").innerHTML = list.length
+    ? list.map(s => `<div class="card"><strong>${esc(s.name)}</strong><br>
+        <span class="tag">${esc(s.type)}</span> <span class="note">${esc(s.area)}</span>
+        <p class="note">${esc(s.note)}</p></div>`).join("")
+    : `<p class="note">No services match.</p>`;
+}
+$("s-type").addEventListener("change", renderServices);
+$("s-q").addEventListener("input", renderServices);
+renderServices();
+
+// ---- Start up ----
+refreshKeyUI();
+if ("serviceWorker" in navigator) {
+  // Lets the app open offline and install to the home screen. Fails quietly on plain http.
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+</script>
+</body>
+</html>
