@@ -159,6 +159,8 @@
   }
   nav button .ic { font-size: 20px; line-height: 1; }
   nav button.active { color: var(--forest); background: var(--sage); }
+  .about { font-size: 13.5px; color: var(--ink); margin: 6px 0 4px; }
+  .about a { color: var(--forest); font-weight: 600; }
 
   /* Home screen */
   .hero { padding-bottom: 54px; }
@@ -432,10 +434,15 @@ const PLANTS = [
     tips: "Good for shady corners and offices." }
 ];
 
+// Found from public listings and the CEA registered-lab list. Not yet checked by SEED:
+// confirm hours, stock and sample policies before sending anyone there.
 const SERVICES = [
-  { name: "Green Roots Nursery", type: "Nursery", area: "Colombo", emoji: "🪴", note: "Potted plants, herbs and seedlings" },
-  { name: "Hill Country Soil Lab", type: "Soil testing", area: "Kandy", emoji: "🧪", note: "Soil pH and nutrient testing" },
-  { name: "Garden Plan Co.", type: "Consultant", area: "Galle", emoji: "📐", note: "Landscaping and garden layout advice" }
+  { name: "Amari", type: "Nursery", area: "Colombo 3, Kollupitiya", emoji: "🪴", note: "Retail plant shop: bonsai and indoor plants" },
+  { name: "CIC Seeds (Pvt) Ltd", type: "Nursery", area: "Sri Lanka", emoji: "🌱", note: "Seeds, grafted fruit plants and tissue-culture banana plants" },
+  { name: "Bamber and Bruce (Pvt) Ltd", type: "Soil testing", area: "Colombo 10", emoji: "🧪", note: "Soil testing, water quality and microbiology (registered lab)" },
+  { name: "University of Kelaniya, Central Instrument Lab", type: "Soil testing", area: "Kelaniya", emoji: "🔬", note: "Soil, plant and fertilizer analysis. Ask if outside samples are accepted" },
+  { name: "Design Consortium (Pvt) Ltd", type: "Consultant", area: "Colombo", emoji: "📐", note: "Architecture and landscaping design" },
+  { name: "Garden Doctor Landscaping Expert", type: "Consultant", area: "Malabe", emoji: "🌳", note: "Landscape gardening, plants and garden care" }
 ];
 
 // ---- Helpers ----
@@ -592,19 +599,38 @@ $("identify-btn").addEventListener("click", async () => {
           <div>
             <div class="name">${esc(r.scientificName)}</div>
             <div class="sub">${esc(names)}${r.family ? " · " + esc(r.family) : ""}</div>
+            <p class="about">Loading description…</p>
             ${local
               ? `<button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
-              : `<div class="sub" style="margin-top:6px">Not in SEED's starter list yet.</div>`}
+              : `<div class="sub" style="margin-top:6px">No SEED care guide for this plant yet.</div>`}
           </div>
         </div>
       </div>`;
     }).join("");
+    loadDescriptions();
   } catch (err) {
     $("identify-status").textContent = err.message;
   } finally {
     btn.disabled = false;
   }
 });
+
+// Fill in each result's description from Wikipedia (free, no key). Missing pages are fine.
+async function loadDescriptions() {
+  const cards = [...document.querySelectorAll("#identify-results .about")];
+  await Promise.all(cards.map(async el => {
+    const card = el.closest(".match");
+    const sci = card.querySelector(".name").textContent.trim();
+    try {
+      const res = await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(sci.replace(/ /g, "_")));
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      el.innerHTML = `${esc(data.extract || "")} <a href="${esc(data.content_urls?.desktop?.page || "#")}" target="_blank" rel="noopener">Wikipedia</a>`;
+    } catch (e) {
+      el.textContent = "No description found for this name.";
+    }
+  }));
+}
 
 $("identify-results").addEventListener("click", e => {
   const b = e.target.closest("button[data-id]"); if (b) openPlant(b.dataset.id);
@@ -682,6 +708,7 @@ function renderServices() {
           <strong>${esc(s.name)}</strong>
           <span class="tag">${esc(s.type)}</span><span class="muted"> · ${esc(s.area)}</span>
           <div class="muted" style="margin-top:4px">${esc(s.note)}</div>
+          <div class="muted" style="margin-top:6px;font-size:12px">Listed publicly. Confirm details before visiting.</div>
         </div></div>`).join("")
     : `<p class="muted">No services match.</p>`;
 }
