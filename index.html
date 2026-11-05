@@ -442,7 +442,16 @@ const PLANTS = [
     fert: "Every 6–8 weeks in growing season.",
     prune: "Remove yellow leaves and spent flowers.",
     season: "Thrives indoors year-round.",
-    tips: "Good for shady corners and offices." }
+    tips: "Good for shady corners and offices." },
+  { id: "lemongrass", name: "Lemongrass", sci: "Cymbopogon citratus", emoji: "🌾", type: "Herb",
+    sun: "full", space: "medium", drainage: "good", struct: "ok",
+    water: "Regular watering; let the top soil dry slightly between waterings.",
+    light: "Full sun, 6+ hours.",
+    soil: "Loamy, well-draining soil with compost.",
+    fert: "Compost or balanced feed every 2–3 months.",
+    prune: "Cut outer stalks at the base as they grow; leave the centre clump.",
+    season: "Grows fast in the warm, wet months.",
+    tips: "Clumps spread outward; divide them every few years." }
 ];
 
 // Found from public listings and the CEA registered-lab list. Not yet checked by Seeds:
@@ -469,7 +478,8 @@ const GROWTH = {
   mint:    { habit: "Spreading herb", height: "30–60 cm", rate: "Fast", lifespan: "Several years", outdoors: "Yes, in partial shade; spreads quickly" },
   rose:    { habit: "Flowering shrub", height: "0.5–2 m", rate: "Moderate", lifespan: "Many years", outdoors: "Yes, in full sun with good airflow" },
   jasmine: { habit: "Shrub or climbing vine", height: "1–3 m", rate: "Moderate", lifespan: "Many years", outdoors: "Yes, in full sun" },
-  lily:    { habit: "Clumping leafy plant", height: "40–90 cm", rate: "Moderate", lifespan: "Many years", outdoors: "Mostly indoors or in shade" }
+  lily:    { habit: "Clumping leafy plant", height: "40–90 cm", rate: "Moderate", lifespan: "Many years", outdoors: "Mostly indoors or in shade" },
+  lemongrass: { habit: "Tall clumping grass", height: "1–1.5 m", rate: "Fast", lifespan: "Several years", outdoors: "Yes, in full sun" }
 };
 
 // ---- Seasons in Sri Lanka. Colombo's heavy-rain months are roughly May–June and October–November;
@@ -485,7 +495,8 @@ const SEASONAL = {
   mint:    { dry: "Water more often; partial shade keeps it lush.", wet: "Watch for root rot in pots and trim for airflow." },
   rose:    { dry: "Deep water weekly, mulch, and watch for pests.", wet: "Prune for airflow and treat for black spot." },
   jasmine: { dry: "Water deeply; this is the main flowering time.", wet: "Avoid waterlogging and prune after flowering." },
-  lily:    { dry: "Keep soil lightly moist; mist leaves in dry indoor air.", wet: "Water less often and keep out of cold draughts." }
+  lily:    { dry: "Keep soil lightly moist; mist leaves in dry indoor air.", wet: "Water less often and keep out of cold draughts." },
+  lemongrass: { dry: "Water regularly and mulch to keep the roots cool.", wet: "Check drainage and avoid soggy clumps." }
 };
 
 // Used for identified plants without a Seeds care guide. Not specific to the species.
