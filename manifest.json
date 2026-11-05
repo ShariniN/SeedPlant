@@ -1,6 +1,6 @@
 {
-  "name": "SEED - Smart Plant Assistant",
-  "short_name": "SEED",
+  "name": "Seeds - Smart Plant Assistant",
+  "short_name": "Seeds",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

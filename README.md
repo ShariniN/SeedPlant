@@ -1,4 +1,4 @@
-# SEED - Smart Plant Assistant
+# Seeds - Smart Plant Assistant
 
 A phone app for identifying plants from a photo, reading care guides, checking whether a spot suits a plant, and browsing local services.
 

@@ -6,14 +6,14 @@
 <meta name="theme-color" content="#1f4d3a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SEED">
+<meta name="apple-mobile-web-app-title" content="Seeds">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<title>SEED - Smart Plant Assistant</title>
+<title>Seeds - Smart Plant Assistant</title>
 <style>
   :root {
     --bg: #f5f4ee; --card: #ffffff; --ink: #18221b; --muted: #6d7a70; --line: #e4e6dc;
@@ -44,8 +44,8 @@
 
   /* Top bar */
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 18px 6px; max-width: 720px; margin: 0 auto; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: .02em; }
-  .brand-mark { width: 36px; height: 36px; border-radius: 12px; background: var(--forest); color: var(--lime); display: grid; place-items: center; font-size: 18px; }
+  .brand { display: flex; align-items: center; }
+  .brand-logo { height: 34px; width: auto; display: block; }
   .round-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; font-size: 17px; }
 
   .screen-head { margin: 18px 0 16px; }
@@ -203,7 +203,7 @@
 <body>
 
 <div class="topbar">
-  <div class="brand"><span class="brand-mark">🌱</span> SEED</div>
+  <div class="brand"><img class="brand-logo" src="logo.png" alt="Seeds"></div>
   <button class="round-btn" aria-label="Search" data-tab="plants">🔎</button>
 </div>
 
@@ -445,7 +445,7 @@ const PLANTS = [
     tips: "Good for shady corners and offices." }
 ];
 
-// Found from public listings and the CEA registered-lab list. Not yet checked by SEED:
+// Found from public listings and the CEA registered-lab list. Not yet checked by Seeds:
 // confirm hours, stock and sample policies before sending anyone there.
 const SERVICES = [
   { name: "Amari", type: "Nursery", area: "Colombo 3, Kollupitiya", emoji: "🪴", note: "Retail plant shop: bonsai and indoor plants" },
@@ -488,13 +488,13 @@ const SEASONAL = {
   lily:    { dry: "Keep soil lightly moist; mist leaves in dry indoor air.", wet: "Water less often and keep out of cold draughts." }
 };
 
-// Used for identified plants without a SEED care guide. Not specific to the species.
+// Used for identified plants without a Seeds care guide. Not specific to the species.
 const GENERAL_CARE = [
   "Water when the top 2–3 cm of soil is dry, not on a fixed schedule.",
   "Start with bright, indirect light, and check the species' own light needs before moving it into full sun.",
   "Use well-draining soil and never leave the pot standing in water.",
   "Remove dead or yellow leaves, and check the leaves underneath for pests.",
-  "Search the species name for its care needs, or add it to SEED when a guide is ready."
+  "Search the species name for its care needs, or add it to Seeds when a guide is ready."
 ];
 
 function growthHTML(id) {
@@ -740,7 +740,7 @@ $("identify-btn").addEventListener("click", async () => {
             ${local
               ? `<div class="sub">${esc(GROWTH[local.id].habit)} · up to ${esc(GROWTH[local.id].height)}</div>
                  <button class="btn ghost" data-id="${local.id}">View ${esc(local.name)} care guide</button>`
-              : `<div class="sub">No SEED care guide for this plant yet. General care tips:</div>
+              : `<div class="sub">No Seeds care guide for this plant yet. General care tips:</div>
                  <ul class="general">${GENERAL_CARE.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
                  <div class="sub">Growth details aren't available for this plant yet.</div>`}
           </div>

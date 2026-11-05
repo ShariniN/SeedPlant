@@ -1,6 +1,6 @@
-// Caches the app shell so SEED opens offline. Plant ID requests always go to the network.
-const CACHE = "seed-v7";
-const SHELL = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png"];
+// Caches the app shell so Seeds opens offline. Plant ID requests always go to the network.
+const CACHE = "seed-v8";
+const SHELL = ["./", "index.html", "manifest.json", "logo.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));
