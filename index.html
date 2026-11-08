@@ -325,6 +325,7 @@
     <div id="loc-banner-home"></div>
 
     <div class="section-row"><h3>My plants</h3><button data-go="guides">Explore library</button></div>
+    <div id="sample-banner"></div>
     <div id="garden-grid" class="grid"></div>
 
     <div class="scan-banner">
@@ -687,8 +688,29 @@ function store(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* ignore */ }
 }
 
+// Sample garden for first-time visitors. Clearly labelled in the app and removable.
+function sampleGarden() {
+  const now = Date.now();
+  return [
+    { id: "tomato", last: now - 4 * DAY },     // due (every 3 days)
+    { id: "aloe", last: now - 20 * DAY },      // due (every 14 days)
+    { id: "basil", last: now - 3600e3 },       // watered an hour ago
+    { id: "snake", last: now - 2 * DAY }       // not due for a while
+  ];
+}
+
+let savedGarden = load("seeds.garden", null);
+let savedSample = load("seeds.sample", false);
+if (savedGarden === null) {                     // first visit: start with sample data
+  savedGarden = sampleGarden();
+  savedSample = true;
+  store("seeds.garden", savedGarden);
+  store("seeds.sample", true);
+}
+
 const state = {
-  garden: load("seeds.garden", []),          // [{ id, last }] last = time of last watering (ms)
+  garden: savedGarden,                       // [{ id, last }] last = time of last watering (ms)
+  sample: savedSample,                       // true while the sample garden is in use
   loc: load("seeds.loc", null),              // { lat, lon, label } from the user's location
   forecast: load("seeds.forecast", null),    // last Open-Meteo response, kept for offline use
   notified: load("seeds.notified", {}),      // alert keys already sent as notifications
@@ -799,7 +821,36 @@ function removeFromGarden(id) {
   renderAll();
 }
 
+function loadSample() {
+  state.garden = sampleGarden();
+  state.sample = true;
+  store("seeds.garden", state.garden);
+  store("seeds.sample", true);
+  toast("Sample plants loaded");
+  renderAll();
+  checkAlerts();
+}
+
+function clearSample() {
+  state.garden = [];
+  state.sample = false;
+  store("seeds.garden", state.garden);
+  store("seeds.sample", false);
+  toast("Sample data cleared. Add your own plants from the guide.");
+  renderAll();
+  checkAlerts();
+}
+
+function renderSampleBanner() {
+  $("sample-banner").innerHTML = state.sample && state.garden.length
+    ? `<div class="loc-banner" style="background:var(--blue-l);border-color:#c9ddf7">
+         <p><b>Sample data</b><br>These plants and alerts are examples. Clear them to start your own garden.</p>
+         <button class="btn ghost sm" data-clear-sample>Clear</button></div>`
+    : "";
+}
+
 function renderGarden() {
+  renderSampleBanner();
   const cat = CATS[state.category];
   const list = state.garden.filter(e => !cat || cat.includes(e.id));
   $("garden-grid").innerHTML = list.length
@@ -811,7 +862,8 @@ function renderGarden() {
             <div class="tags"><span class="tag ${d.cls}">${d.text}</span></div></div></button>`;
       }).join("")
     : `<div class="card garden-empty" style="grid-column:1/-1;margin:0"><b>${state.garden.length ? "No plants in this group" : "Your garden is empty"}</b>
-        <span class="muted">${state.garden.length ? "Try another filter." : "Open a plant in the guide and tap Add to my garden to start watering reminders."}</span></div>`;
+        <span class="muted">${state.garden.length ? "Try another filter." : "Open a plant in the guide and tap Add to my garden to start watering reminders."}</span>
+        ${state.garden.length ? "" : `<div><button class="btn ghost sm" style="margin-top:12px" data-load-sample>Load sample plants</button></div>`}</div>`;
   applyPhotos($("garden-grid"));
 }
 
@@ -937,6 +989,8 @@ function sheetClick(e) {
 document.addEventListener("click", e => {
   const card = e.target.closest("[data-open]");
   if (card) openPlant(card.dataset.open);
+  if (e.target.closest("[data-load-sample]")) loadSample();
+  if (e.target.closest("[data-clear-sample]")) clearSample();
 });
 
 $("search").addEventListener("input", e => { state.guideQuery = e.target.value; renderGuide(); });
@@ -1303,6 +1357,13 @@ function buildAlerts() {
         title: `Strong sun ${day}`, body: `UV index ${Math.round(uv)}. Give seedlings some midday shade.` });
     }
   }
+  // Sample alerts while the sample garden is on. Shown in the panel only, never sent as notifications.
+  if (state.sample && state.garden.length) {
+    out.push({ key: "sample:rain", level: "critical", icon: "🌧️", sample: true,
+      title: "Sample: heavy rain forecast", body: "Example alert. Real alerts appear here from the forecast for your location." });
+    out.push({ key: "sample:tip", level: "info", icon: "💡", sample: true,
+      title: "Sample: check drainage", body: "Example care tip. Make sure pots have drainage holes before the next watering." });
+  }
   return out;
 }
 
@@ -1326,7 +1387,7 @@ function checkAlerts() {
   renderBell(alerts);
   if (notificationsSupported() && Notification.permission === "granted") {
     alerts.forEach(a => {
-      if (state.notified[a.key]) return;
+      if (a.sample || state.notified[a.key]) return;
       state.notified[a.key] = Date.now();
       sendNotification(a.title, a.body, a.key);
     });
@@ -1468,7 +1529,7 @@ renderGuide();
 renderForecast();
 renderServices();
 checkAlerts();
-if (state.loc || state.forecast) loadForecast();   // show the last known weather straight away
+loadForecast();   // real weather for the user's location, or Colombo until they allow location
 
 // If the user already allowed location in the browser, use it without asking again
 if (navigator.permissions && navigator.permissions.query) {
