@@ -14,7 +14,18 @@ No install from an app store and no server. Open the link on your phone and add 
 
 To add it to your home screen: Chrome menu > **Add to Home screen**, or Safari Share > **Add to Home Screen**.
 
+## Features
+
+- **Home:** your garden with watering levels, quick care actions and a scan shortcut.
+- **Forecast:** 7-day local weather with plant care advice (Open-Meteo, no key).
+- **Services:** nurseries, labs and consultants on a map, sorted by distance from you.
+- **Guides:** care library with a spot-suitability check.
+- **Alerts:** watering reminders and weather warnings. Optional browser notifications work while the app is open.
+- First visit shows labelled sample plants and alerts. Tap Clear to start your own garden.
+- Location is optional. Without it the app uses Colombo.
+
 ## Notes
+
 
 - Plant identification uses the Pl@ntNet API (free tier, 500 identifications per day).
 - The guide, placement check and services work without a connection after the first load.

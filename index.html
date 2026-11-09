@@ -123,13 +123,13 @@
   .btn.sm { width: auto; padding: 9px 14px; font-size: 13.5px; }
 
   /* Quick actions */
-  .quick { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .quick button {
-    background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 14px; text-align: left; cursor: pointer;
-    font-size: 14px; font-weight: 700; color: var(--ink); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 13px 11px; text-align: left; cursor: pointer;
+    font-size: 13px; font-weight: 700; color: var(--ink); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; line-height: 1.25;
   }
   .quick .ico { width: 38px; height: 38px; border-radius: 13px; background: var(--green-l); display: grid; place-items: center; font-size: 18px; }
-  .quick .sub { font-weight: 500; color: var(--muted); font-size: 12.5px; margin-top: -6px; }
+  .quick .sub { font-weight: 500; color: var(--muted); font-size: 11.5px; margin-top: 3px; line-height: 1.3; }
   .quick button.water { background: linear-gradient(135deg, #2f7fe6, #4aa0f0); color: #fff; border: 0; }
   .quick button.water .ico { background: rgba(255,255,255,.22); }
   .quick button.water .sub { color: rgba(255,255,255,.85); }
@@ -271,6 +271,60 @@
   #s-map { height: 240px; border-radius: 22px; border: 1px solid var(--line); margin-top: 12px; box-shadow: var(--shadow); background: #e9efec; }
   .map-note { font-size: 12px; color: var(--muted); margin: 6px 2px 0; }
 
+  /* Header tagline + back */
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand-sub { font-size: 9.5px; font-weight: 800; letter-spacing: .16em; color: var(--green); margin: 2px 0 0 3px; }
+  .topbar .back-btn { box-shadow: var(--shadow); flex: none; }
+
+  /* Badges + small bits */
+  .count-badge { display: inline-block; background: var(--green-l); color: var(--green-d); font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; margin-left: 8px; vertical-align: middle; letter-spacing: 0; }
+  .live-badge { background: var(--green-l); color: var(--green-d); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+  .live-badge::before { content: "● "; font-size: 9px; }
+
+  /* Scan banner extras */
+  .scan-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tag-g.plain { background: transparent; color: #9bb0bf; font-weight: 600; }
+  .scan-actions { display: flex; gap: 10px; align-items: center; }
+  .scan-actions .btn { flex: 1; }
+  .scan-up { width: 48px; height: 48px; border-radius: 16px; border: 0; background: rgba(255,255,255,.14); color: #fff; font-size: 18px; cursor: pointer; flex: none; }
+
+  /* Garden cards: water level badge + bar */
+  .ph-wrap { position: relative; }
+  .water-badge { position: absolute; top: 8px; right: 8px; background: #fff; color: var(--green-d); font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px; box-shadow: 0 2px 8px rgba(13,27,42,.15); }
+  .water-badge.low { color: var(--red); }
+  .bar { height: 5px; border-radius: 99px; background: #e6ecf0; overflow: hidden; margin-top: 8px; }
+  .bar i { display: block; height: 100%; background: var(--blue); border-radius: 99px; }
+  .bar.low i { background: var(--red); }
+  .pb-row { margin-top: 8px; }
+  .pb-row .tag { white-space: nowrap; margin-top: 0; }
+  .pill-glass { white-space: nowrap; }
+  .hero-top .pill-glass { font-size: 11px; padding: 6px 10px; }
+  .hero-top .pill-glass.soft { font-size: 12px; }
+  .wx-care b { font-size: inherit; }
+
+  /* Guides: spot check link */
+  .spot-link { display: flex; justify-content: space-between; width: 100%; margin-top: 12px; padding: 13px 16px; border-radius: 16px; border: 1px dashed #bfe8d4; background: var(--green-ll); color: var(--green-d); font-weight: 700; font-size: 14px; cursor: pointer; }
+
+  /* Sheet: botanical profile grid */
+  .profile { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .profile .fact.wide { grid-column: 1 / -1; }
+  .sheet h4 { margin: 18px 0 0; font-size: 16px; font-weight: 800; }
+
+  /* Alerts panel */
+  .alert-head { display: flex; gap: 12px; align-items: center; }
+  .alert-head .ico { width: 44px; height: 44px; border-radius: 14px; background: var(--red-l); display: grid; place-items: center; font-size: 20px; flex: none; }
+  .alert-head h2 { font-size: 19px; font-weight: 800; line-height: 1.2; }
+  .alert-head p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
+  .alert-sec { display: flex; align-items: center; gap: 8px; margin: 18px 2px 4px; font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .alert-sec.red { color: var(--red); }
+  .alert-sec.green { color: var(--green-d); }
+  .alert .lvl { float: right; }
+  .task { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); margin-top: 8px; }
+  .task b { display: block; font-size: 14px; }
+  .task span { font-size: 12.5px; color: var(--muted); }
+  .task .when { font-size: 12px; font-weight: 800; color: var(--green-d); white-space: nowrap; }
+  .task .when.due { color: var(--red); }
+
   /* Toast */
   #toast {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: 100px; background: var(--navy); color: #fff; padding: 11px 16px;
@@ -282,7 +336,13 @@
 <body>
 
 <header class="topbar">
-  <img class="brand-logo" src="logo.png" alt="Seeds">
+  <div class="brand">
+    <button class="back-btn hidden" id="btn-back" data-go="home" aria-label="Back to home">←</button>
+    <div>
+      <img class="brand-logo" src="logo.png" alt="Seeds">
+      <div class="brand-sub">SMART PLANT CARE</div>
+    </div>
+  </div>
   <div class="top-actions">
     <button class="round-btn" id="btn-weather" aria-label="Forecast">🌦️</button>
     <button class="round-btn" id="btn-bell" aria-label="Alerts and reminders">
@@ -300,58 +360,60 @@
         <span class="pill-glass">My garden</span>
         <span class="pill-glass soft" id="next-water">💧 No plants yet</span>
       </div>
-      <h3 id="greet">Welcome back 👋</h3>
+      <h3 id="greet">Welcome back! 👋</h3>
       <p id="hero-sub">Add a plant from the guide to start tracking its watering.</p>
       <div class="stats">
-        <div class="stat"><b id="st-count">0</b><span>Plants</span></div>
+        <div class="stat"><b id="st-count">0</b><span>Active plants</span></div>
         <div class="stat"><b id="st-due">0</b><span>Need water</span></div>
-        <div class="stat"><b id="st-temp">—</b><span>Right now</span></div>
+        <div class="stat"><b id="st-temp">—</b><span>Temp now</span></div>
       </div>
     </div>
 
     <label class="search" style="display:flex;margin-top:14px">
       <span>🔎</span>
-      <input type="text" id="home-search" placeholder="Search plants in the guide…" aria-label="Search plants">
+      <input type="text" id="home-search" placeholder="Search garden species…" aria-label="Search plants">
     </label>
 
     <div class="chips" id="garden-chips">
-      <button class="pill on" data-cat="all">All plants</button>
-      <button class="pill" data-cat="indoor">🪴 Indoor</button>
+      <button class="pill on" data-cat="all" id="chip-all">All Plants (0)</button>
+      <button class="pill" data-cat="indoor">🪴 Indoor Foliage</button>
       <button class="pill" data-cat="succulent">🌵 Succulents</button>
-      <button class="pill" data-cat="herbs">🌿 Herbs &amp; veg</button>
+      <button class="pill" data-cat="herbs">🌿 Herbs &amp; Veg</button>
       <button class="pill" data-cat="flowering">🌹 Flowering</button>
     </div>
 
     <div id="loc-banner-home"></div>
 
-    <div class="section-row"><h3>My plants</h3><button data-go="guides">Explore library</button></div>
+    <div class="scan-banner">
+      <div class="scan-top">
+        <span class="tag-g">📷 PLANT SCANNER</span>
+        <span class="tag-g plain">Instant ID</span>
+      </div>
+      <h3>Scan &amp; Identify Plant</h3>
+      <p>Identify species and get tailored care steps in seconds.</p>
+      <div class="scan-actions">
+        <button class="btn light" data-go="scan">⛶ Launch Camera Scanner</button>
+        <button class="scan-up" data-go="scan" aria-label="Upload a photo">⬆</button>
+      </div>
+    </div>
+
+    <div class="section-row"><h3>My Plants <span class="count-badge" id="plant-count">0 Plants</span></h3><button data-go="guides">Explore Full Library</button></div>
     <div id="sample-banner"></div>
     <div id="garden-grid" class="grid"></div>
 
-    <div class="scan-banner">
-      <div class="tags"><span class="tag-g">AI plant ID</span><span class="tag-g">Instant ID</span></div>
-      <h3>Scan &amp; identify a plant</h3>
-      <p>Snap a leaf or flower and get likely species, care tips and a spot check.</p>
-      <button class="btn light" data-go="scan">Launch camera scanner</button>
-    </div>
-
-    <div class="section-row"><h3>Quick actions</h3></div>
+    <div class="section-row"><h3>Quick Care Actions</h3></div>
     <div class="quick">
       <button class="water" id="qa-water">
         <div class="ico">💧</div>
-        <div>Water all plants<div class="sub" id="qa-water-sub">Nothing to water yet</div></div>
+        <div>Water All Plants<div class="sub" id="qa-water-sub">Nothing to water</div></div>
       </button>
       <button data-go="guides">
         <div class="ico">➕</div>
-        <div>Add a plant<div class="sub">Browse the guide</div></div>
-      </button>
-      <button data-go="placement">
-        <div class="ico">📍</div>
-        <div>Check a spot<div class="sub">Will it suit a plant?</div></div>
+        <div>Add New Plant<div class="sub">Browse guide</div></div>
       </button>
       <button data-go="services">
         <div class="ico">🏪</div>
-        <div>Nearby services<div class="sub">Nurseries &amp; labs</div></div>
+        <div>Find Services<div class="sub">Nurseries &amp; labs</div></div>
       </button>
     </div>
   </section>
@@ -397,9 +459,8 @@
   <!-- FORECAST -->
   <section id="forecast">
     <div class="screen-head">
-      <div class="eyebrow">Local weather</div>
-      <h2>Forecast &amp; care</h2>
-      <p>Weather for where you are, with care tips for your plants.</p>
+      <h2>7-Day Microclimate Forecast</h2>
+      <p>Upcoming precipitation &amp; weather protection advice</p>
     </div>
     <div id="loc-banner-fc"></div>
     <div id="forecast-body"></div>
@@ -408,14 +469,14 @@
   <!-- GUIDES -->
   <section id="guides">
     <div class="screen-head">
-      <div class="eyebrow">Explore</div>
-      <h2>Botanical library</h2>
-      <p>Care basics for common plants, with light and water at a glance.</p>
+      <h2>Botanical Library &amp; Guides</h2>
+      <p>Explore plant care profiles, light and watering at a glance</p>
     </div>
     <label class="search" style="display:flex">
       <span>🔎</span>
-      <input type="text" id="search" placeholder="Search tomato, Solanum, money plant…" aria-label="Search guide">
+      <input type="text" id="search" placeholder="Search species (e.g. Tomato, Basil)" aria-label="Search guide">
     </label>
+    <button class="spot-link" data-go="placement">📍 Check if a spot suits a plant <span>→</span></button>
     <div id="guide-grid" class="grid" style="margin-top:14px"></div>
   </section>
 
@@ -462,19 +523,19 @@
   <!-- SERVICES -->
   <section id="services">
     <div class="screen-head">
-      <div class="eyebrow">Growing support, nearby</div>
-      <h2>Agriculture services &amp; shops</h2>
-      <p>Nurseries, soil labs and garden consultants in Sri Lanka, sorted by distance from you.</p>
+      <h2>Agriculture Services &amp; Shops</h2>
+      <p>Locate nurseries, soil labs &amp; garden consultants nearby</p>
     </div>
     <label class="search" style="display:flex">
       <span>🔎</span>
-      <input type="text" id="s-q" placeholder="Name or area, e.g. Colombo, soil" aria-label="Search services">
+      <input type="text" id="s-q" placeholder="Search nurseries, labs, consultants…" aria-label="Search services">
     </label>
     <div class="chips" id="s-pills"></div>
     <div id="loc-banner-sv"></div>
     <div id="s-map" aria-label="Map of services"></div>
     <p class="map-note">Pins are approximate, placed at the town or area level. Check the address before you go.</p>
-    <div id="service-list" style="margin-top:14px"></div>
+    <div class="section-row"><h3>Listed Providers</h3><span class="count-badge" id="svc-count">0 found</span></div>
+    <div id="service-list"></div>
   </section>
 </main>
 
@@ -736,6 +797,7 @@ function showSection(name) {
   document.querySelectorAll("#bottom-nav button[data-nav]").forEach(b => {
     b.classList.toggle("active", b.dataset.nav === name);
   });
+  $("btn-back").classList.toggle("hidden", name === "home");
   window.scrollTo({ top: 0, behavior: "smooth" });
   if (name === "services") initMap();
   if (name === "forecast") renderForecast();
@@ -849,17 +911,29 @@ function renderSampleBanner() {
     : "";
 }
 
+// Water level: share of the watering interval left (100% just watered, 0% due)
+function waterPct(entry) {
+  const span = (plantById(entry.id)?.water_days || 7) * DAY;
+  return Math.max(0, Math.min(100, Math.round((dueAt(entry) - Date.now()) / span * 100)));
+}
+
 function renderGarden() {
   renderSampleBanner();
+  $("chip-all").textContent = `All Plants (${state.garden.length})`;
+  $("plant-count").textContent = `${state.garden.length} ${state.garden.length === 1 ? "Plant" : "Plants"}`;
   const cat = CATS[state.category];
   const list = state.garden.filter(e => !cat || cat.includes(e.id));
   $("garden-grid").innerHTML = list.length
     ? list.map(e => {
-        const p = plantById(e.id); const d = fmtDue(dueAt(e));
+        const p = plantById(e.id); const d = fmtDue(dueAt(e)); const pct = waterPct(e);
+        const low = pct <= 25 ? " low" : "";
         return `<button class="plant-btn" data-open="${p.id}">
-          <div class="ph" data-pid="${p.id}">${p.emoji}</div>
+          <div class="ph-wrap"><div class="ph" data-pid="${p.id}">${p.emoji}</div>
+            <span class="water-badge${low}">💧 ${pct}%</span></div>
           <div class="pb"><strong>${esc(p.name)}</strong>
-            <div class="tags"><span class="tag ${d.cls}">${d.text}</span></div></div></button>`;
+            <span class="sci">${esc(p.sci)}</span>
+            <div class="bar${low}"><i style="width:${pct}%"></i></div>
+            <div class="pb-row"><span class="tag ${d.cls}">${d.text}</span></div></div></button>`;
       }).join("")
     : `<div class="card garden-empty" style="grid-column:1/-1;margin:0"><b>${state.garden.length ? "No plants in this group" : "Your garden is empty"}</b>
         <span class="muted">${state.garden.length ? "Try another filter." : "Open a plant in the guide and tap Add to my garden to start watering reminders."}</span>
@@ -868,9 +942,7 @@ function renderGarden() {
 }
 
 function renderHero() {
-  const now = new Date(), h = now.getHours();
-  const greet = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-  $("greet").textContent = `${greet}! 👋`;
+  $("greet").textContent = "Welcome back! 👋";
   const due = state.garden.filter(e => dueAt(e) <= Date.now()).length;
   $("st-count").textContent = state.garden.length;
   $("st-due").textContent = due;
@@ -887,7 +959,7 @@ function renderHero() {
   } else {
     $("next-water").textContent = "💧 No plants yet";
   }
-  $("qa-water-sub").textContent = state.garden.length ? `${state.garden.length} in your garden` : "Nothing to water yet";
+  $("qa-water-sub").textContent = state.garden.length ? `${state.garden.length} in garden` : "Nothing to water";
 }
 
 function renderAll() {
@@ -954,19 +1026,21 @@ function openPlant(id) {
       <div><b>${esc(SUN_LABEL[p.sun])}</b><span>Light</span></div>
       <div><b>${e ? esc(nextTxt.replace("Water ", "")) : "—"}</b><span>${e ? "Next watering" : "Not in garden"}</span></div>
     </div>
+    <h4>Botanical Profile &amp; Care Guide</h4>
+    <div class="profile">
+      <div class="fact"><b>☀️ Sunlight</b><span>${esc(p.light)}</span></div>
+      <div class="fact"><b>💧 Watering</b><span>${esc(p.water)}</span></div>
+      <div class="fact"><b>🌱 Soil</b><span>${esc(p.soil)}</span></div>
+      <div class="fact"><b>🧪 Fertilizer</b><span>${esc(p.fert)}</span></div>
+      <div class="fact"><b>✂️ Pruning</b><span>${esc(p.prune)}</span></div>
+      <div class="fact"><b>💡 Tip</b><span>${esc(p.tips)}</span></div>
+    </div>
     <div class="actions">
       ${inG
         ? `<button class="btn sm" data-act="water" data-id="${p.id}">💧 Mark watered</button>
            <button class="btn danger" data-act="remove" data-id="${p.id}">Remove</button>`
-        : `<button class="btn" data-act="add" data-id="${p.id}">➕ Add to my garden</button>`}
-    </div>
-    <div class="facts">
-      <div class="fact"><b>Watering</b><span>${esc(p.water)}</span></div>
-      <div class="fact"><b>Sunlight</b><span>${esc(p.light)}</span></div>
-      <div class="fact"><b>Soil</b><span>${esc(p.soil)}</span></div>
-      <div class="fact"><b>Fertilizer</b><span>${esc(p.fert)}</span></div>
-      <div class="fact"><b>Pruning</b><span>${esc(p.prune)}</span></div>
-      <div class="fact"><b>Tip</b><span>${esc(p.tips)}</span></div>
+        : `<button class="btn" data-act="add" data-id="${p.id}">+ Add Plant to My Garden</button>`}
+      <button class="btn ghost" data-act="spot" data-id="${p.id}">📍 Check a spot</button>
     </div>
     ${growthHTML(p.id)}
     ${seasonalHTML(p.id)}`);
@@ -982,6 +1056,7 @@ function sheetClick(e) {
   if (b.dataset.act === "add") { addToGarden(id); openPlant(id); }
   if (b.dataset.act === "water") { waterPlant(id); toast(`Watered ${plantById(id).name}`); openPlant(id); }
   if (b.dataset.act === "remove") { removeFromGarden(id); toast("Removed from your garden"); openPlant(id); }
+  if (b.dataset.act === "spot") { closeSheet(); $("p-plant").value = id; showSection("placement"); }
   if (b.dataset.act === "open-alert") { const pid = b.dataset.id; closeSheet(); openPlant(pid); }
 }
 
@@ -989,6 +1064,8 @@ function sheetClick(e) {
 document.addEventListener("click", e => {
   const card = e.target.closest("[data-open]");
   if (card) openPlant(card.dataset.open);
+  const add = e.target.closest("[data-add]");
+  if (add) { addToGarden(add.dataset.add); add.remove(); }
   if (e.target.closest("[data-load-sample]")) loadSample();
   if (e.target.closest("[data-clear-sample]")) clearSample();
 });
@@ -1132,7 +1209,10 @@ $("identify-btn").addEventListener("click", async () => {
             <p class="about">Loading description…</p>
             ${local
               ? `<div class="sub">${esc(GROWTH[local.id].habit)} · up to ${esc(GROWTH[local.id].height)}</div>
-                 <button class="btn ghost" data-open="${local.id}">View ${esc(local.name)} care guide</button>`
+                 <div class="actions" style="margin-top:10px">
+                   <button class="btn ghost" data-open="${local.id}">View ${esc(local.name)} care guide</button>
+                   ${inGarden(local.id) ? "" : `<button class="btn sm" data-add="${local.id}">+ Add Plant to My Garden</button>`}
+                 </div>`
               : `<div class="sub">No Seeds care guide for this plant yet. General care tips:</div>
                  <ul class="general">${GENERAL_CARE.map(t => `<li>${esc(t)}</li>`).join("")}</ul>
                  <div class="sub">Growth details aren't available for this plant yet.</div>`}
@@ -1309,26 +1389,42 @@ function renderForecast() {
   $("forecast-body").innerHTML = `
     <div class="hero" style="margin-top:0">
       <div class="hero-top">
-        <span class="pill-glass">${esc(label)}</span>
-        <span class="pill-glass soft">${wxIcon(c.weather_code)} ${esc(wxText(c.weather_code))}</span>
+        <span class="pill-glass">● Live microclimate</span>
+        <span class="pill-glass soft">📍 ${esc(label)}</span>
       </div>
-      <h3 style="font-size:46px;margin-top:12px">${Math.round(c.temperature_2m)}°C</h3>
-      <p>Today's rain chance ${d.precipitation_probability_max[0]}%. Wind ${Math.round(c.wind_speed_10m)} km/h.</p>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;position:relative;z-index:1">
+        <div>
+          <h3 style="font-size:46px;margin-top:12px">${Math.round(c.temperature_2m)}°C</h3>
+          <p>${wxIcon(c.weather_code)} ${esc(wxText(c.weather_code))} • Wind ${Math.round(c.wind_speed_10m)} km/h</p>
+        </div>
+        <div style="text-align:right">
+          <b style="font-size:30px;font-weight:800;line-height:1">${d.precipitation_probability_max[0]}%</b>
+          <p style="margin:2px 0 0">Precipitation prob.</p>
+        </div>
+      </div>
       <div class="wx-now">
         <div class="stat"><b>${Math.round(c.relative_humidity_2m)}%</b><span>Humidity</span></div>
         <div class="stat"><b>${d.uv_index_max[0]?.toFixed(0) ?? "—"}</b><span>UV index</span></div>
         <div class="stat"><b>${(c.precipitation ?? 0).toFixed(1)} mm</b><span>Rain now</span></div>
       </div>
     </div>
-    <div class="section-row"><h3>7-day plant action plan</h3></div>
-    ${d.time.map((date, i) => `
+    <div class="section-row"><h3>7-Day Plant Action Schedule</h3><span class="live-badge">Live sync</span></div>
+    ${d.time.map((date, i) => {
+      const uv = Math.round(d.uv_index_max[i] ?? 0);
+      const uvLabel = uv < 3 ? "Low" : uv < 6 ? "Moderate" : uv < 8 ? "High" : "Very high";
+      return `
       <div class="wx-row">
         <div class="ico">${wxIcon(d.weather_code[i])}</div>
         <div><b>${i === 0 ? "Today" : esc(dayName(date))}</b>
-          <div class="sub">${esc(wxText(d.weather_code[i]))} · Rain ${d.precipitation_probability_max[i]}% · Humidity ${Math.round(d.relative_humidity_2m_mean[i])}%</div></div>
+          <div class="sub">${esc(wxText(d.weather_code[i]))}</div></div>
         <div class="temps">${Math.round(d.temperature_2m_max[i])}°<span>${Math.round(d.temperature_2m_min[i])}°</span></div>
-        <div class="wx-care">${esc(careForDay(d.precipitation_sum[i], d.temperature_2m_max[i]))}</div>
-      </div>`).join("")}
+        <div class="sub" style="grid-column:1/-1;display:flex;justify-content:space-between;gap:8px">
+          <span>💧 Rain ${d.precipitation_probability_max[i]}%</span>
+          <span>Humidity ${Math.round(d.relative_humidity_2m_mean[i])}%</span>
+          <span>UV Index ${uv} (${uvLabel})</span></div>
+        <div class="wx-care"><b>Care Action:</b> ${esc(careForDay(d.precipitation_sum[i], d.temperature_2m_max[i]))}</div>
+      </div>`;
+    }).join("")}
     <p class="muted" style="margin:12px 2px 0">Forecast from Open-Meteo. Local care tips are general guidance.</p>`;
   renderLocBanners();
 }
@@ -1409,16 +1505,38 @@ $("btn-bell").addEventListener("click", () => {
   else if (Notification.permission === "granted") perm = `<div class="reminder-box"><b>Reminders are on</b><p>You'll get a notification when a plant needs water or weather needs attention, while the app is open.</p></div>`;
   else if (Notification.permission === "denied") perm = `<div class="reminder-box"><b>Reminders are blocked</b><p>Turn notifications on for this site in your browser settings.</p></div>`;
   else perm = `<div class="reminder-box"><b>Turn on reminders</b><p>Get a notification when a plant needs water or weather needs attention.</p><button class="btn sm" data-perm>Turn on reminders</button></div>`;
-  const list = alerts.length
-    ? alerts.map(a => `<div class="alert ${a.level}"><div class="lv">${a.icon}</div><div style="min-width:0"><b>${esc(a.title)}</b><p>${esc(a.body)}</p>
-        ${a.plantId ? `<button class="btn ghost sm" style="margin-top:8px" data-act="water" data-id="${a.plantId}">Mark watered</button>` : ""}</div></div>`).join("")
-    : `<div class="card" style="margin-top:12px;text-align:center"><b>All caught up</b><p class="muted" style="margin:6px 0 0">Nothing needs attention right now.</p></div>`;
+  // Threats (weather and sample alerts) and scheduled care tasks (watering), as in the app design
+  const LVL = { critical: ["red", "CRITICAL"], warn: ["amber", "WARNING"], info: ["blue", "ADVISORY"] };
+  const threats = alerts.filter(a => !a.plantId);
+  const dueTasks = alerts.filter(a => a.plantId).map(a => ({ id: a.plantId, due: true }));
+  const soon = state.garden
+    .filter(e => dueAt(e) > Date.now() && dueAt(e) - Date.now() <= 2 * DAY)
+    .map(e => {
+      const diff = dueAt(e) - Date.now();
+      const when = diff < DAY ? `In ${Math.ceil(diff / 3.6e6)} h` : "Tomorrow";
+      return { id: e.id, due: false, when };
+    });
+  const tasks = [...dueTasks, ...soon];
+
+  const threatHTML = threats.length
+    ? threats.map(a => { const [c, t] = LVL[a.level] || LVL.info;
+        return `<div class="alert ${a.level}"><div class="lv">${a.icon}</div><div style="min-width:0;flex:1">
+          <span class="tag ${c} lvl">${t}</span><b>${esc(a.title)}</b><p>${esc(a.body)}</p></div></div>`; }).join("")
+    : `<p class="muted" style="margin:8px 2px">No weather threats in the next few days.</p>`;
+  const taskHTML = tasks.length
+    ? tasks.map(t => `<div class="task"><div><b>💧 Water ${esc(plantById(t.id).name)}</b><span>${t.due ? "Due now" : "Coming up"}</span></div>
+        ${t.due ? `<button class="btn ghost sm" data-act="water" data-id="${t.id}">Done</button>` : `<span class="when">${esc(t.when)}</span>`}</div>`).join("")
+    : `<p class="muted" style="margin:8px 2px">No tasks scheduled. Add plants from the guide to get watering reminders.</p>`;
   const sheet = openSheet(`
-    <div class="sheet-head"><div><div class="eyebrow">Garden alerts</div><h2>Notifications</h2></div>
+    <div class="sheet-head">
+      <div class="alert-head"><div class="ico">⚠️</div><div><h2>Garden Threat &amp; Care Alerts</h2>
+        <p>${threats.length} active ${threats.length === 1 ? "threat" : "threats"} &amp; ${tasks.length} scheduled ${tasks.length === 1 ? "task" : "tasks"}</p></div></div>
       <button class="close-x" data-close aria-label="Close">✕</button></div>
     ${perm}
-    <div class="section-row"><h3>Right now</h3></div>
-    ${list}`);
+    <div class="alert-sec red">⚠ Weather &amp; plant threats</div>
+    ${threatHTML}
+    <div class="alert-sec green">✓ Scheduled care tasks</div>
+    ${taskHTML}`);
   sheet.addEventListener("click", e => {
     if (e.target.closest("[data-perm]")) {
       if (!notificationsSupported()) return;
@@ -1442,7 +1560,7 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) { ch
 // ---- Services ----
 const SERVICE_ICON = { "Nursery": "🪴", "Soil testing": "🧪", "Consultant": "📐", "Gardeners": "🌿" };
 const serviceTypes = ["", ...new Set(SERVICES.map(s => s.type))];
-const TYPE_LABEL = { "": "All" };
+const TYPE_LABEL = { "": `All Services (${SERVICES.length})` };
 $("s-pills").innerHTML = serviceTypes.map(t =>
   `<button class="pill ${t === "" ? "on" : ""}" data-type="${esc(t)}">${esc(TYPE_LABEL[t] || t)}</button>`).join("");
 $("s-pills").addEventListener("click", e => {
@@ -1492,6 +1610,7 @@ function renderServices() {
       (!q || (s.name + " " + s.area + " " + s.note).toLowerCase().includes(q)))
     .map(s => ({ ...s, km: haversineKm(from, s) }))
     .sort((a, b) => a.km - b.km);
+  $("svc-count").textContent = `${list.length} found`;
   $("service-list").innerHTML = list.length
     ? list.map((s, i) => `<div class="card svc-card">
         <div class="svc">
@@ -1505,7 +1624,7 @@ function renderServices() {
         </div>
         <div class="svc-actions">
           <a class="btn sm" style="flex:1" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}">Directions</a>
+             href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}">➤ Get Directions</a>
           <button class="btn ghost sm" style="flex:1" data-focus="${i}">Show on map</button>
         </div>
       </div>`).join("")
