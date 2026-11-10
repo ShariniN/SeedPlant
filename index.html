@@ -392,6 +392,26 @@
   .set-row span { font-size: 12.5px; color: var(--muted); }
   .set-row .btn { flex: none; }
 
+  /* ---- Spacing & alignment pass ---- */
+  .screen-head { margin: 12px 0 18px; }
+  .section-row { margin: 26px 2px 12px; align-items: center; }
+  .section-row h3 { display: flex; align-items: center; }
+  /* Filter chips scroll all the way to the screen edge instead of being cut at the margin */
+  .chips { margin: 0 -16px; padding: 14px 16px 2px; scroll-padding: 0 16px; }
+  .loc-banner { margin-top: 14px; }
+  .scan-banner { margin-top: 18px; }
+  /* Forecast card */
+  .wx-hero { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; position: relative; z-index: 1; }
+  .wx-temp { font-size: 48px; font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+  .wx-hero p { margin: 6px 0 0; }
+  .wx-big { font-size: 54px; line-height: 1; }
+  /* Service cards: two equal buttons */
+  .svc-actions .btn { flex: 1 1 0; min-width: 0; }
+  .svc-card { margin-bottom: 12px; }
+  .map-note { margin: 8px 2px 0; }
+  /* Scanner controls breathe a little more */
+  .scan-controls + .card { margin-top: 20px !important; }
+
   /* Toast */
   #toast {
     position: fixed; left: 50%; transform: translateX(-50%); bottom: 100px; background: var(--navy); color: #fff; padding: 11px 16px;
@@ -465,7 +485,6 @@
     </div>
 
     <div class="section-row"><h3>My Plants <span class="count-badge" id="plant-count">0 Plants</span></h3><button data-go="guides">Explore Full Library</button></div>
-    <div id="sample-banner"></div>
     <div id="garden-grid" class="grid"></div>
 
     <div class="section-row"><h3>Quick Care Actions</h3></div>
@@ -561,11 +580,8 @@
 
   <!-- PLACEMENT -->
   <section id="placement">
-    <div class="back-row">
-      <button class="back-btn" data-go="home" aria-label="Back">←</button>
-      <div class="eyebrow">Smart placement</div>
-    </div>
     <div class="screen-head">
+      <div class="eyebrow" style="margin-bottom:6px">Smart placement</div>
       <h2>Find its happy place.</h2>
       <p>Tell us about the spot and we'll check whether it suits the plant.</p>
     </div>
@@ -612,7 +628,7 @@
     <div class="chips" id="s-pills"></div>
     <div id="loc-banner-sv"></div>
     <div id="s-map" aria-label="Map of services"></div>
-    <p class="map-note">Pins are approximate, placed at the town or area level. Check the address before you go.</p>
+    <p class="map-note">Pins and distances are approximate. Listings are public; confirm details before you visit.</p>
     <div class="section-row"><h3>Listed Providers</h3><span class="count-badge" id="svc-count">0 found</span></div>
     <div id="service-list"></div>
   </section>
@@ -998,34 +1014,6 @@ function removeFromGarden(id) {
   renderAll();
 }
 
-function loadSample() {
-  state.garden = sampleGarden();
-  state.sample = true;
-  store("seeds.garden", state.garden);
-  store("seeds.sample", true);
-  toast("Sample plants loaded");
-  renderAll();
-  checkAlerts();
-}
-
-function clearSample() {
-  state.garden = [];
-  state.sample = false;
-  store("seeds.garden", state.garden);
-  store("seeds.sample", false);
-  toast("Sample data cleared. Add your own plants from the guide.");
-  renderAll();
-  checkAlerts();
-}
-
-function renderSampleBanner() {
-  $("sample-banner").innerHTML = state.sample && state.garden.length
-    ? `<div class="loc-banner" style="background:var(--blue-l);border-color:#c9ddf7">
-         <p><b>Sample data</b><br>These plants and alerts are examples. Clear them to start your own garden.</p>
-         <button class="btn ghost sm" data-clear-sample>Clear</button></div>`
-    : "";
-}
-
 // Water level: share of the watering interval left (100% just watered, 0% due)
 function waterPct(entry) {
   const span = (plantById(entry.id)?.water_days || 7) * DAY;
@@ -1033,7 +1021,6 @@ function waterPct(entry) {
 }
 
 function renderGarden() {
-  renderSampleBanner();
   $("chip-all").textContent = `All Plants (${state.garden.length})`;
   $("plant-count").textContent = `${state.garden.length} ${state.garden.length === 1 ? "Plant" : "Plants"}`;
   const cat = CATS[state.category];
@@ -1052,7 +1039,7 @@ function renderGarden() {
       }).join("")
     : `<div class="card garden-empty" style="grid-column:1/-1;margin:0"><b>${state.garden.length ? "No plants in this group" : "Your garden is empty"}</b>
         <span class="muted">${state.garden.length ? "Try another filter." : "Open a plant in the guide and tap Add to my garden to start watering reminders."}</span>
-        ${state.garden.length ? "" : `<div><button class="btn ghost sm" style="margin-top:12px" data-load-sample>Load sample plants</button></div>`}</div>`;
+        ${state.garden.length ? "" : `<div><button class="btn ghost sm" style="margin-top:12px" data-go="guides">Browse plant guide</button></div>`}</div>`;
   applyPhotos($("garden-grid"));
 }
 
@@ -1089,14 +1076,14 @@ function renderAll() {
 function plantCard(p) {
   const inG = inGarden(p.id);
   return `<button class="plant-btn" data-open="${p.id}">
-    <div class="ph" data-pid="${p.id}">${p.emoji}</div>
+    <div class="ph-wrap"><div class="ph" data-pid="${p.id}">${p.emoji}</div>
+      ${inG ? `<span class="water-badge">✓ In garden</span>` : ""}</div>
     <div class="pb">
       <strong>${esc(p.name)}</strong>
       <span class="sci">${esc(p.sci)}</span>
       <div class="tags">
         <span class="tag ${SUN_CLASS[p.sun]}">${SUN_LABEL[p.sun]}</span>
         <span class="tag blue">Water ${p.water_days}d</span>
-        ${inG ? `<span class="tag">✓ In garden</span>` : ""}
       </div>
     </div></button>`;
 }
@@ -1141,7 +1128,7 @@ function openPlant(id) {
     <div class="mini-stats">
       <div><b>${p.water_days} d</b><span>Water every</span></div>
       <div><b>${esc(SUN_LABEL[p.sun])}</b><span>Light</span></div>
-      <div><b>${e ? esc(nextTxt.replace("Water ", "")) : "—"}</b><span>${e ? "Next watering" : "Not in garden"}</span></div>
+      <div><b>${e ? esc(nextTxt.replace("Water ", "").replace(/^./, ch => ch.toUpperCase())) : "—"}</b><span>${e ? "Next watering" : "Not in garden"}</span></div>
     </div>
     <h4>Botanical Profile &amp; Care Guide</h4>
     <div class="profile">
@@ -1183,8 +1170,6 @@ document.addEventListener("click", e => {
   if (card) openPlant(card.dataset.open);
   const add = e.target.closest("[data-add]");
   if (add) { addToGarden(add.dataset.add); add.remove(); }
-  if (e.target.closest("[data-load-sample]")) loadSample();
-  if (e.target.closest("[data-clear-sample]")) clearSample();
 });
 
 $("search").addEventListener("input", e => { state.guideQuery = e.target.value; renderGuide(); });
@@ -1589,20 +1574,17 @@ function renderForecast() {
         <span class="pill-glass">● Live microclimate</span>
         <span class="pill-glass soft">📍 ${esc(label)}</span>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;position:relative;z-index:1">
+      <div class="wx-hero">
         <div>
-          <h3 style="font-size:46px;margin-top:12px">${Math.round(c.temperature_2m)}°C</h3>
-          <p>${wxIcon(c.weather_code)} ${esc(wxText(c.weather_code))} • Wind ${Math.round(c.wind_speed_10m)} km/h</p>
+          <div class="wx-temp">${Math.round(c.temperature_2m)}°C</div>
+          <p>${esc(wxText(c.weather_code))} · Wind ${Math.round(c.wind_speed_10m)} km/h</p>
         </div>
-        <div style="text-align:right">
-          <b style="font-size:30px;font-weight:800;line-height:1">${d.precipitation_probability_max[0]}%</b>
-          <p style="margin:2px 0 0">Precipitation prob.</p>
-        </div>
+        <div class="wx-big" aria-hidden="true">${wxIcon(c.weather_code)}</div>
       </div>
       <div class="wx-now">
+        <div class="stat"><b>${d.precipitation_probability_max[0]}%</b><span>Rain chance</span></div>
         <div class="stat"><b>${Math.round(c.relative_humidity_2m)}%</b><span>Humidity</span></div>
         <div class="stat"><b>${d.uv_index_max[0]?.toFixed(0) ?? "—"}</b><span>UV index</span></div>
-        <div class="stat"><b>${(c.precipitation ?? 0).toFixed(1)} mm</b><span>Rain now</span></div>
       </div>
     </div>
     <div class="section-row"><h3>7-Day Plant Action Schedule</h3><span class="live-badge">Live sync</span></div>
@@ -1621,8 +1603,7 @@ function renderForecast() {
           <span>UV Index ${uv} (${uvLabel})</span></div>
         <div class="wx-care"><b>Care Action:</b> ${esc(careForDay(d.precipitation_sum[i], d.temperature_2m_max[i]))}</div>
       </div>`;
-    }).join("")}
-    <p class="muted" style="margin:12px 2px 0">Forecast from Open-Meteo. Local care tips are general guidance.</p>`;
+    }).join("")}`;
   renderLocBanners();
 }
 
@@ -1649,13 +1630,6 @@ function buildAlerts() {
       if (uv >= 8) out.push({ key: `weather:uv:${date}`, level: "info", icon: "☀️",
         title: `Strong sun ${day}`, body: `UV index ${Math.round(uv)}. Give seedlings some midday shade.` });
     }
-  }
-  // Sample alerts while the sample garden is on. Shown in the panel only, never sent as notifications.
-  if (state.sample && state.garden.length) {
-    out.push({ key: "sample:rain", level: "critical", icon: "🌧️", sample: true,
-      title: "Sample: heavy rain forecast", body: "Example alert. Real alerts appear here from the forecast for your location." });
-    out.push({ key: "sample:tip", level: "info", icon: "💡", sample: true,
-      title: "Sample: check drainage", body: "Example care tip. Make sure pots have drainage holes before the next watering." });
   }
   return out;
 }
@@ -1818,9 +1792,8 @@ function renderServices() {
           <div class="ico">${SERVICE_ICON[s.type] || s.emoji}</div>
           <div style="min-width:0;flex:1">
             <strong>${esc(s.name)}</strong>
-            <div class="meta">${esc(s.type)} · ${esc(s.area)} · <b>~${s.km < 10 ? s.km.toFixed(1) : Math.round(s.km)} km</b></div>
+            <div class="meta">${esc(s.type)} · ${esc(s.area)} · <b>${s.km < 0.1 ? "&lt;0.1" : "~" + (s.km < 10 ? s.km.toFixed(1) : Math.round(s.km))} km</b></div>
             <div class="note-line">${esc(s.note)}</div>
-            <div class="disclaim">Listed publicly. Location is approximate. Confirm details before visiting.</div>
           </div>
         </div>
         <div class="svc-actions">
@@ -1832,8 +1805,11 @@ function renderServices() {
     : `<p class="muted">No services match.</p>`;
   $("service-list").onclick = e => {
     const b = e.target.closest("[data-focus]"); if (!b || !map) return;
-    const s = list[+b.dataset.focus];
-    map.setView([s.lat, s.lon], 13);
+    const i = +b.dataset.focus, s = list[i];
+    // The map sits above the list: bring it into view, zoom to the pin and open its label
+    $("s-map").scrollIntoView({ behavior: "smooth", block: "center" });
+    map.setView([s.lat, s.lon], 14);
+    serviceMarkers[i]?.openPopup();
   };
   drawServiceMarkers(list);
 }
@@ -1886,13 +1862,10 @@ function renderProfile() {
   else if (Notification.permission === "granted") remText = "On: watering and weather alerts";
   else if (Notification.permission === "denied") remText = "Blocked. Allow notifications in browser settings";
   else { remText = "Off"; remBtn = `<button class="btn sm" data-pf="notify">Turn on</button>`; }
-  const sampleOn = state.sample && n > 0;
   $("pf-settings").innerHTML = `
     <div class="set-row"><div><b>🔔 Reminders</b><span>${esc(remText)}</span></div>${remBtn}</div>
     <div class="set-row"><div><b>📍 Location</b><span>${state.loc ? "Using your location" : "Using Colombo until you allow location"}</span></div>
       ${state.loc ? `<button class="btn ghost sm" data-pf="forget">Forget</button>` : `<button class="btn sm" data-locate>Allow</button>`}</div>
-    <div class="set-row"><div><b>🌱 Sample plants</b><span>${sampleOn ? "Showing example plants and alerts" : "Load example plants to explore the app"}</span></div>
-      ${sampleOn ? `<button class="btn ghost sm" data-clear-sample>Clear</button>` : `<button class="btn ghost sm" data-load-sample>Load</button>`}</div>
     <div class="set-row"><div><b>🗑️ Reset app</b><span>Delete your garden, profile and settings on this device</span></div>
       <button class="btn danger sm" data-pf="reset">Reset</button></div>`;
 }
